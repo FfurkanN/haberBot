@@ -118,6 +118,10 @@ namespace haberBot
         {
             zdnetNews();
         }
+        private void webrazzi_Click(object sender, EventArgs e)
+        {
+            webrazziNews();
+        }
 
         private void techInsideNews()
         {
@@ -208,12 +212,13 @@ namespace haberBot
 
                 string newsDate = jsExecutor.ExecuteScript(script)?.ToString();
 
+                newsDate = ParseTime(newsDate);
+
                 DateTime currentTime = DateTime.Now;
-                DateTime postTime = currentTime.Add(-ParseTime(newsDate));
                 string date = currentTime.ToString();
 
 
-                if (postTime.ToString("dd.MM.yyyy").Equals(date.Substring(0, date.IndexOf(" "))))
+                if (newsDate.Equals(date.Substring(0, date.IndexOf(" "))))
                 {
                     script = @"
                     var element = document.evaluate('//*[@id=""wrapper""]/div[4]/div/div/div/div[1]/div[" + i + "]/div/div[1]/h4/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
@@ -249,7 +254,7 @@ namespace haberBot
 
                     string newsText = (string)jsExecutor.ExecuteScript(script);
 
-                    Add_Document_with_CustomID(site, EncodeTextForFirestore(newsHeader), newsText, postTime.ToString("dd.MM.yyyy"));
+                    Add_Document_with_CustomID(site, EncodeTextForFirestore(newsHeader), newsText, newsDate);
 
                     driver.Close();
                     driver.SwitchTo().Window(windowHandles[0]);
@@ -263,6 +268,7 @@ namespace haberBot
         }
         private void technologyReviewNews()
         {
+            //Düzenlenmesi lazm
             IWebDriver driver1 = new ChromeDriver();
             driver1.Navigate().GoToUrl("https://www.technologyreview.com/topic/artificial-intelligence/");
 
@@ -280,14 +286,13 @@ namespace haberBot
 
                 string timeText = (string)jsExecutor.ExecuteScript(script);
 
-                DateTime currentTime = DateTime.Now;
-                DateTime postTime = currentTime.Add(-ParseTime(timeText));
-                string date = currentTime.ToString();
+                string postTime = ParseTime(timeText);
+                string date = DateTime.Now.ToString();
 
 
-                if (postTime.ToString("dd.MM.yyyy").Equals(date.Substring(0, date.IndexOf(" "))))
+                if (postTime.Equals(date.Substring(0, date.IndexOf(" "))))
                 {
-                    string news_date = postTime.ToString("dd.MM.yyyy");
+                    string news_date = postTime;
 
                     script = @"
                     var element = document.evaluate('//*[@id=\""content\""]/div/div[1]/ul/li[" + i + "]/div/div[1]/header/h3/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
@@ -481,11 +486,9 @@ namespace haberBot
                 newsDate = jsExecutor.ExecuteScript(script)?.ToString();
                 DateTime currentTime = DateTime.Now;
 
-                DateTime postTime = currentTime.Add(-ParseTime(newsDate));
-                dateNow = currentTime.ToString();
-                newsDate = postTime.ToString("dd.MM.yyyy");
+                newsDate = ParseTime(newsDate);
 
-                if (true)
+                if (newsDate.Equals(dateNow))
                 {
                     script = @"
                     var link = document.evaluate('/html/body/div[3]/div/div/div[1]/div/div/div/div[2]/div/div/div[2]/div/div/div[2]/div/div/div[2]/div/div/div[1]/div/section/div/section/div/div[1]/div[1]/article["+(i++)+"]/div/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
@@ -564,32 +567,113 @@ namespace haberBot
             }
         }
 
-
-        static TimeSpan ParseTime(string timeText)
+        private void webrazziNews()
         {
+            IWebDriver driver = new ChromeDriver();
+            driver.Navigate().GoToUrl("https://webrazzi.com/kategori/yapay-zeka/");
+
+            string haber_site = "Webrazzi";
+            IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)driver;
+
+            int i = 1;
+            string newsDate = "", dateNow = "";
+            while (true)
+            {
+                string script = @"
+                var timeElement = document.evaluate('/html/body/div[8]/div/div/div[1]/div["+i+"]/div[2]/div/div/span', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+                "if (timeElement) {return timeElement.textContent;} else {return null;}";
+
+                newsDate = jsExecutor.ExecuteScript(script)?.ToString();
+
+                if(newsDate == null)
+                {
+                    i++;
+                    continue;
+                }
+
+                DateTime currentTime = DateTime.Now;
+
+                newsDate = ParseTime(newsDate);
+                dateNow = currentTime.ToString("dd.MM.yyyy");
+
+                if (newsDate.Equals(dateNow))
+                {
+                    script = @"
+                    var link = document.evaluate('//*[@id=""wrapper""]/div/div/div[1]/div["+(i++)+"]/div[1]/div/div[2]/div[1]/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+                    "if (link){link.click();}else{console.log('Link not found');}";
+                    jsExecutor.ExecuteScript(script);
+
+                    script = @"
+                    var h1Element = document.evaluate('//*[@id=""wrapper""]/div/div[1]/article/div[1]/div/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                    if (h1Element)
+                    {
+                        return h1Element.textContent;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    ";
+
+                    string haberBasligi = jsExecutor.ExecuteScript(script)?.ToString();
+
+                    script = @"
+                    var paragraphs = document.evaluate('//*[@id=""wrapper""]/div/div[1]/article/div[3]/div/div[2]/div[1]/p', document, null, 
+                        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+                    var texts = '';
+                    for (var i = 0; i < paragraphs.snapshotLength; i++) {
+                        texts += paragraphs.snapshotItem(i).innerText + ' ';
+                    }
+                    return texts.trim();
+                    ";
+
+                    string newsText = (string)jsExecutor.ExecuteScript(script);
+
+                    Add_Document_with_CustomID(haber_site, EncodeTextForFirestore(haberBasligi), newsText, newsDate);
+                    driver.Navigate().Back();
+                }
+                else
+                {
+                    driver.Close();
+                    break;
+                }
+            }
+        }
+
+
+
+        static string ParseTime(string timeText)
+        {
+            DateTime currentDate = DateTime.Now;
+           // MessageBox.Show(timeText);
             if (timeText.Contains("hours") || timeText.Contains("saat") || timeText.Contains("hour"))
             {
                 int hours = int.Parse(timeText.Split(' ')[0]);
-                return TimeSpan.FromHours(hours);
+                return currentDate.AddHours(-hours).ToString("dd.MM.yyyy");
             }
             else if (timeText.Contains("mins") || timeText.Contains("min") || timeText.Contains("dakika"))
             {
                 int minutes = int.Parse(timeText.Split(' ')[0]);
-                return TimeSpan.FromMinutes(minutes);
+                return currentDate.AddMinutes(-minutes).ToString("dd.MM.yyyy");
             }
             else if (timeText.Contains("days") || timeText.Contains("day") || timeText.Contains("gün"))
             {
                 int days = int.Parse(timeText.Split(' ')[0]);
-                return TimeSpan.FromDays(days);
+                return currentDate.AddDays(-days).ToString("dd.MM.yyyy");
             }
             else if (timeText.Contains("week") || timeText.Contains("weeks") || timeText.Contains("hafta"))
             {
                 int weeks = int.Parse(timeText.Split(' ')[0]);
-                return TimeSpan.FromDays(weeks * 7);
+                return currentDate.AddDays(-weeks * 7).ToString("dd.MM.yyyy");
+            }
+            else if (DateTime.TryParseExact(timeText, new[] { "d MMMM yyyy", "dd MMMM yyyy" }, new CultureInfo("tr-TR"), DateTimeStyles.None, out DateTime date))
+            {
+                return date.ToString("dd.MM.yyyy");
             }
             else
             {
-                throw new ArgumentException("Beklenmeyen zaman formatı");
+                DateTime dateTime = DateTime.ParseExact(timeText,"dd MMMM yy", null);
+                return dateTime.ToString("dd.MM.yyyy");
             }
         }
         static string EncodeTextForFirestore(string input)

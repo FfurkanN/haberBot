@@ -38,7 +38,7 @@
             this.technologyreview = new System.Windows.Forms.Button();
             this.mashable = new System.Windows.Forms.Button();
             this.zdnet = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
+            this.webrazzi = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
@@ -141,14 +141,15 @@
             this.zdnet.UseVisualStyleBackColor = true;
             this.zdnet.Click += new System.EventHandler(this.zdnet_Click);
             // 
-            // button8
+            // webrazzi
             // 
-            this.button8.Location = new System.Drawing.Point(13, 230);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(112, 23);
-            this.button8.TabIndex = 10;
-            this.button8.Text = "button8";
-            this.button8.UseVisualStyleBackColor = true;
+            this.webrazzi.Location = new System.Drawing.Point(13, 230);
+            this.webrazzi.Name = "webrazzi";
+            this.webrazzi.Size = new System.Drawing.Size(112, 23);
+            this.webrazzi.TabIndex = 10;
+            this.webrazzi.Text = "webrazzi";
+            this.webrazzi.UseVisualStyleBackColor = true;
+            this.webrazzi.Click += new System.EventHandler(this.webrazzi_Click);
             // 
             // button9
             // 
@@ -195,7 +196,7 @@
             this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
-            this.Controls.Add(this.button8);
+            this.Controls.Add(this.webrazzi);
             this.Controls.Add(this.zdnet);
             this.Controls.Add(this.mashable);
             this.Controls.Add(this.technologyreview);
@@ -226,7 +227,7 @@
         private System.Windows.Forms.Button technologyreview;
         private System.Windows.Forms.Button mashable;
         private System.Windows.Forms.Button zdnet;
-        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button webrazzi;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button11;
