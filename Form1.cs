@@ -266,6 +266,7 @@ namespace haberBot
                     ";
 
                     string allParagraphTexts = (string)jsExecutor.ExecuteScript(script);
+                    frekans(allParagraphTexts);
                     Add_Document_with_CustomID(news_site, EncodeTextForFirestore(news_Header), allParagraphTexts, news_date);
 
                     driver1.Navigate().Back();
@@ -432,7 +433,11 @@ namespace haberBot
             // Sonuçları yazdırma
             foreach (var kvp in wordFrequency)
             {
-                MessageBox.Show($"Kelime: {kvp.Key}, Frekans: {kvp.Value}");
+                if(kvp.Value >= 5)
+                {
+                    MessageBox.Show($"Kelime: {kvp.Key}, Frekans: {kvp.Value}");
+                    // veritabanına yazdır. ama ben boş kelimeler halini yapacam
+                }
             }
         }
 
