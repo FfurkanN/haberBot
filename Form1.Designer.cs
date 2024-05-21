@@ -37,7 +37,7 @@
             this.shiftDelete = new System.Windows.Forms.Button();
             this.technologyreview = new System.Windows.Forms.Button();
             this.mashable = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
+            this.zdnet = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
@@ -131,14 +131,15 @@
             this.mashable.UseVisualStyleBackColor = true;
             this.mashable.Click += new System.EventHandler(this.mashable_Click);
             // 
-            // button7
+            // zdnet
             // 
-            this.button7.Location = new System.Drawing.Point(13, 200);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(112, 23);
-            this.button7.TabIndex = 9;
-            this.button7.Text = "button7";
-            this.button7.UseVisualStyleBackColor = true;
+            this.zdnet.Location = new System.Drawing.Point(13, 200);
+            this.zdnet.Name = "zdnet";
+            this.zdnet.Size = new System.Drawing.Size(112, 23);
+            this.zdnet.TabIndex = 9;
+            this.zdnet.Text = "zdnet";
+            this.zdnet.UseVisualStyleBackColor = true;
+            this.zdnet.Click += new System.EventHandler(this.zdnet_Click);
             // 
             // button8
             // 
@@ -195,7 +196,7 @@
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button8);
-            this.Controls.Add(this.button7);
+            this.Controls.Add(this.zdnet);
             this.Controls.Add(this.mashable);
             this.Controls.Add(this.technologyreview);
             this.Controls.Add(this.shiftDelete);
@@ -224,7 +225,7 @@
         private System.Windows.Forms.Button shiftDelete;
         private System.Windows.Forms.Button technologyreview;
         private System.Windows.Forms.Button mashable;
-        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button zdnet;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;

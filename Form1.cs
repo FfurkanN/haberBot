@@ -19,6 +19,7 @@ using OpenQA.Selenium.Interactions;
 using SeleniumExtras.WaitHelpers;
 using System.Text.RegularExpressions;
 using System.CodeDom.Compiler;
+using System.Timers;
 
 namespace haberBot
 {
@@ -96,8 +97,29 @@ namespace haberBot
         {
 
         }
-
         private void techInside_Click(object sender, EventArgs e)
+        {
+            techInsideNews();
+        }
+        private void shiftDelete_Click(object sender, EventArgs e)
+        {
+            shiftdeleteNews();
+        }
+        private void technologyreview_Click(object sender, EventArgs e)
+        {
+            technologyReviewNews();
+        }
+        private void mashable_Click(object sender, EventArgs e)
+        {
+            mashableNews();
+
+        }
+        private void zdnet_Click(object sender, EventArgs e)
+        {
+            zdnetNews();
+        }
+
+        private void techInsideNews()
         {
             IWebDriver driver1 = new ChromeDriver();
             driver1.Navigate().GoToUrl("https://www.techinside.com/yapay-zeka/");
@@ -108,7 +130,7 @@ namespace haberBot
             for (int i = 1; i <= 10; i++)
             {
                 string script = @"
-                var timeElement = document.evaluate('/html/body/div[6]/div[2]/div/div/div/div[2]/div/div[1]/div/div/div[1]/div["+i+"]/div/div[2]/div[2]/span/span[2]/time', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;"+
+                var timeElement = document.evaluate('/html/body/div[6]/div[2]/div/div/div/div[2]/div/div[1]/div/div/div[1]/div[" + i + "]/div/div[2]/div[2]/span/span[2]/time', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
                 "if (timeElement) {return timeElement.textContent;} else {return null;}";
 
                 string haber_tarih = (string)jsExecutor.ExecuteScript(script);
@@ -169,9 +191,9 @@ namespace haberBot
             }
             driver1.Close();
         }
-
-        private void shiftDelete_Click(object sender, EventArgs e)
+        private void shiftdeleteNews()
         {
+
             IWebDriver driver = new ChromeDriver();
             driver.Navigate().GoToUrl("https://shiftdelete.net/yapay-zeka");
             IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)driver;
@@ -181,7 +203,7 @@ namespace haberBot
             for (int i = 1; i <= 10; i++)
             {
                 string script = @"
-                var element = document.evaluate('//*[@id=""wrapper""]/div[4]/div/div/div/div[1]/div["+i+"]/div/aside[2]/span[2]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;"+
+                var element = document.evaluate('//*[@id=""wrapper""]/div[4]/div/div/div/div[1]/div[" + i + "]/div/aside[2]/span[2]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
                 "if (element){return element.textContent;}else{return null;}";
 
                 string newsDate = jsExecutor.ExecuteScript(script)?.ToString();
@@ -194,7 +216,7 @@ namespace haberBot
                 if (postTime.ToString("dd.MM.yyyy").Equals(date.Substring(0, date.IndexOf(" "))))
                 {
                     script = @"
-                    var element = document.evaluate('//*[@id=""wrapper""]/div[4]/div/div/div/div[1]/div["+i+"]/div/div[1]/h4/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;"+
+                    var element = document.evaluate('//*[@id=""wrapper""]/div[4]/div/div/div/div[1]/div[" + i + "]/div/div[1]/h4/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
                     "if (element){element.click();}else{console.log('Element not found.');}";
                     jsExecutor.ExecuteScript(script);
 
@@ -239,11 +261,8 @@ namespace haberBot
                 }
             }
         }
-        
-
-        private void technologyreview_Click(object sender, EventArgs e)
+        private void technologyReviewNews()
         {
-
             IWebDriver driver1 = new ChromeDriver();
             driver1.Navigate().GoToUrl("https://www.technologyreview.com/topic/artificial-intelligence/");
 
@@ -302,7 +321,7 @@ namespace haberBot
                             Console.WriteLine("Kapatma butonu bulunamadı.");
                         }
 
-                        if (closeButton != null) 
+                        if (closeButton != null)
                         {
                             closeButton.Click();
                         }
@@ -336,7 +355,7 @@ namespace haberBot
             }
             driver1.Close();
         }
-        private void mashable_Click(object sender, EventArgs e)
+        private void mashableNews()
         {
             IWebDriver driver1 = new ChromeDriver();
             driver1.Navigate().GoToUrl("https://mashable.com/category/artificial-intelligence");
@@ -346,8 +365,8 @@ namespace haberBot
 
             IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)driver1;
             bool morePost = true;
-            
-            for(int i=1; i<=3; i++)
+
+            for (int i = 1; i <= 3; i++)
             {
                 string script = @"
                 var link = document.evaluate('/html/body/div[2]/div[" + i + "]/div/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
@@ -393,22 +412,27 @@ namespace haberBot
             int a = 1;
             while (morePost)
             {
-                string script = @"var timeElement = document.evaluate('/html/body/main/section/section/div/div[@class=""w-full""][" + a+"]/div/div/div[2]/time', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
-                "return timeElement.textContent;";
-                string newsDate = (string)jsExecutor.ExecuteScript(script);
-                newsDate = newsDate.Trim();
-                DateTime date = DateTime.ParseExact(newsDate, "MM/dd/yyyy", null);
-                newsDate = date.ToString("dd.MM.yyyy");
+                string script = @"
+                    var link = document.evaluate('/html/body/main/section/section/div/div[" + a + "]/div/div/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+                "if (link){link.click();}else{console.log('Link not found');}";
+                jsExecutor.ExecuteScript(script);
+
+                Thread.Sleep(1000);
+
+                script = @"
+                var timeElement = document.evaluate('/html/body/header/div[3]/div[1]/time', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                return timeElement.textContent;
+                ";
+
+                string datetimeValue = (string)jsExecutor.ExecuteScript(script);
+                DateTime date = DateTime.ParseExact(datetimeValue, "MMMM dd, yyyy", CultureInfo.InvariantCulture);
+                string newsDate = date.ToString("dd.MM.yyyy");
 
                 string now = DateTime.Now.ToString();
                 string dateNow = now.Substring(0, now.IndexOf(" "));
 
-                if (newsDate.Equals(dateNow)){
-                    script = @"
-                    var link = document.evaluate('/html/body/main/section/section/div/div["+a+"]/div/div/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
-                    "if (link){link.click();}else{console.log('Link not found');}";
-                    jsExecutor.ExecuteScript(script);
-
+                if (newsDate.Equals(dateNow))
+                {
                     string news_Header = driver1.FindElement(By.XPath("/html/body/header/h1")).Text;
 
                     script = @"
@@ -428,25 +452,132 @@ namespace haberBot
                 else
                 {
                     driver1.Close();
+                    morePost = false;
                     break;
                 }
             }
-
         }
+        private void zdnetNews()
+        {
+            IWebDriver driver = new ChromeDriver();
+            driver.Navigate().GoToUrl("https://www.zdnet.com/topic/artificial-intelligence/");
+
+            string haber_site = "Zdnet";
+            IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)driver;
+
+            //load more button click
+            string script = @"
+            var link = document.evaluate('/html/body/div[3]/div/div/div[1]/div/div/div/div[2]/div/div/div[2]/div/div/div[2]/div/div/div[2]/div/div/div[1]/div/section/div/section/div/div[2]/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+            "if (link){link.click();}else{console.log('Link not found');}";
+            jsExecutor.ExecuteScript(script);
+            int i = 1;
+            string newsDate = "", dateNow="";
+            while (true)
+            {
+                script = @"
+                var timeElement = document.evaluate('/html/body/div[3]/div/div/div[1]/div/div/div/div[2]/div/div/div[2]/div/div/div[2]/div/div/div[2]/div/div/div[1]/div/section/div/section/div/div[1]/div[1]/article["+i+"]/div/div/p/span[1]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+                "if (timeElement) {return timeElement.textContent;} else {return null;}";
+
+                newsDate = jsExecutor.ExecuteScript(script)?.ToString();
+                DateTime currentTime = DateTime.Now;
+
+                DateTime postTime = currentTime.Add(-ParseTime(newsDate));
+                dateNow = currentTime.ToString();
+                newsDate = postTime.ToString("dd.MM.yyyy");
+
+                if (true)
+                {
+                    script = @"
+                    var link = document.evaluate('/html/body/div[3]/div/div/div[1]/div/div/div/div[2]/div/div/div[2]/div/div/div[2]/div/div/div[2]/div/div/div[1]/div/section/div/section/div/div[1]/div[1]/article["+(i++)+"]/div/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+                    "if (link){link.click();}else{console.log('Link not found');}";
+                    jsExecutor.ExecuteScript(script);
+
+                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+
+                    IWebElement iframe = null;
+                    try
+                    {
+                        iframe = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[@id=\"google_ads_iframe_/22309610186/aw-zdnet/interstitial_0\"]")));
+                    }
+                    catch (WebDriverTimeoutException)
+                    {
+                        Console.WriteLine("Iframe bulunamadı.");
+                    }
+
+
+                    if (iframe != null)
+                    {
+                        driver.SwitchTo().Frame(iframe);
+
+                        IWebElement closeButton = null;
+                        try
+                        {
+                            closeButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id=\"dismiss-button\"]")));
+                        }
+                        catch (WebDriverTimeoutException)
+                        {
+                            Console.WriteLine("Kapatma butonu bulunamadı.");
+                        }
+
+                        if (closeButton != null)
+                        {
+                            closeButton.Click();
+                        }
+                        driver.SwitchTo().DefaultContent();
+                    }
+
+
+                    script = @"
+                    var h1Element = document.evaluate('//*[@id=""__layout""]/div/div[3]/main/div/div[1]/div[1]/div[1]/div[1]/div[2]/div/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                    if (h1Element)
+                    {
+                        return h1Element.textContent;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    ";
+
+                    string haberBasligi = jsExecutor.ExecuteScript(script)?.ToString();
+
+                    script = @"
+                    var paragraphs = document.evaluate('html/body/div[1]/div/div/div[3]/main/div/div[1]/div[1]/div[1]/div[2]/div[2]/div[1]/div/p', document, null, 
+                        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+                    var texts = '';
+                    for (var i = 0; i < paragraphs.snapshotLength; i++) {
+                        texts += paragraphs.snapshotItem(i).innerText + ' ';
+                    }
+                    return texts.trim();
+                    ";
+
+                    string newsText = (string)jsExecutor.ExecuteScript(script);
+
+                    Add_Document_with_CustomID(haber_site, EncodeTextForFirestore(haberBasligi), newsText, newsDate);
+                    driver.Navigate().Back();
+                }
+                else
+                {
+                    driver.Close();
+                    break;
+                }
+            }
+        }
+
 
         static TimeSpan ParseTime(string timeText)
         {
-            if (timeText.Contains("hours") || timeText.Contains("saat"))
+            if (timeText.Contains("hours") || timeText.Contains("saat") || timeText.Contains("hour"))
             {
                 int hours = int.Parse(timeText.Split(' ')[0]);
                 return TimeSpan.FromHours(hours);
             }
-            else if (timeText.Contains("mins") || timeText.Contains("dakika"))
+            else if (timeText.Contains("mins") || timeText.Contains("min") || timeText.Contains("dakika"))
             {
                 int minutes = int.Parse(timeText.Split(' ')[0]);
                 return TimeSpan.FromMinutes(minutes);
             }
-            else if (timeText.Contains("days") || timeText.Contains("gün"))
+            else if (timeText.Contains("days") || timeText.Contains("day") || timeText.Contains("gün"))
             {
                 int days = int.Parse(timeText.Split(' ')[0]);
                 return TimeSpan.FromDays(days);
@@ -498,6 +629,7 @@ namespace haberBot
                 }
             }
         }
+
 
     }
 }
