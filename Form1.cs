@@ -279,6 +279,7 @@ namespace haberBot
 
             string news_site = "Mashable";
 
+
             IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)driver1;
             bool morePost = true;
             
