@@ -144,8 +144,11 @@ namespace haberBot
                     driver1.Close();
                     driver1.SwitchTo().Window(windowHandles[0]);
                 }
+                else
+                {
+                    driver1.Close();
+                }
             }
-            MessageBox.Show("TechInside bugünlük haberler eklendi");
             driver1.Close();
         }
 
@@ -299,7 +302,7 @@ namespace haberBot
                 DateTime date = DateTime.ParseExact(datetimeValue, "MMMM dd, yyyy", CultureInfo.InvariantCulture);
                 string newsDate = date.ToString("dd.MM.yyyy");
 
-                string now = new DateTime(2024, 5, 20).ToString();
+                string now = DateTime.Now.ToString();
                 string dateNow = now.Substring(0, now.IndexOf(" "));
 
                 if (newsDate.Equals(dateNow))
