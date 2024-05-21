@@ -407,6 +407,10 @@ namespace haberBot
             return firestoreText;
         }
 
+        private void test()
+        {
+            MessageBox.Show("Hello");
+        }
 
     }
 }
