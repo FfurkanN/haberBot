@@ -17,6 +17,7 @@ using System.IO;
 using System.Xml.Linq;
 using OpenQA.Selenium.Interactions;
 using SeleniumExtras.WaitHelpers;
+using System.Text.RegularExpressions;
 
 namespace haberBot
 {
@@ -407,9 +408,32 @@ namespace haberBot
             return firestoreText;
         }
 
-        private void test()
+        void frekans(string text)
         {
-            MessageBox.Show("Main");
+            // Metni temizleme ve kelimelere ayırma
+            string cleanedText = Regex.Replace(text.ToLower(), @"[^\w\s]", ""); // Noktalama işaretlerini kaldır ve küçük harfe çevir
+            string[] words = cleanedText.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Kelime frekanslarını hesaplamak için bir sözlük oluşturma
+            Dictionary<string, int> wordFrequency = new Dictionary<string, int>();
+
+            foreach (var word in words)
+            {
+                if (wordFrequency.ContainsKey(word))
+                {
+                    wordFrequency[word]++;
+                }
+                else
+                {
+                    wordFrequency[word] = 1;
+                }
+            }
+
+            // Sonuçları yazdırma
+            foreach (var kvp in wordFrequency)
+            {
+                MessageBox.Show($"Kelime: {kvp.Key}, Frekans: {kvp.Value}");
+            }
         }
 
     }
