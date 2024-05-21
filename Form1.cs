@@ -188,6 +188,7 @@ namespace haberBot
 
         private void technologyreview_Click(object sender, EventArgs e)
         {
+
             IWebDriver driver1 = new ChromeDriver();
             driver1.Navigate().GoToUrl("https://www.technologyreview.com/topic/artificial-intelligence/");
 
