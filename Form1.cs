@@ -112,7 +112,6 @@ namespace haberBot
         private void mashable_Click(object sender, EventArgs e)
         {
             mashableNews();
-
         }
         private void zdnet_Click(object sender, EventArgs e)
         {
@@ -121,6 +120,14 @@ namespace haberBot
         private void webrazzi_Click(object sender, EventArgs e)
         {
             webrazziNews();
+        }
+        private void futurism_Click(object sender, EventArgs e)
+        {
+            futurismNews();
+        }
+        private void readwrite_Click(object sender, EventArgs e)
+        {
+            readWriteNews();
         }
 
         private void techInsideNews()
@@ -138,7 +145,6 @@ namespace haberBot
                 "if (timeElement) {return timeElement.textContent;} else {return null;}";
 
                 string haber_tarih = (string)jsExecutor.ExecuteScript(script);
-                MessageBox.Show(haber_tarih);
                 int x = haber_tarih.IndexOf("|");
 
                 DateTime now = DateTime.Now;
@@ -240,7 +246,6 @@ namespace haberBot
                     ";
 
                     string newsHeader = jsExecutor.ExecuteScript(script)?.ToString();
-                    MessageBox.Show(newsHeader);
 
                     script = @"
                     var paragraphs = document.evaluate('/html/body/div/div[2]/div/div/article/div/div/div[2]/div[1]/div[2]/p', document, null, 
@@ -639,17 +644,171 @@ namespace haberBot
                 }
             }
         }
+        private void futurismNews()
+        {
+            // çalışmıyor ayarlanacak
+            IWebDriver driver = new ChromeDriver();
+            driver.Navigate().GoToUrl("https://futurism.com/categories/ai-artificial-intelligence");
+
+            string site = "Futurism";
+            IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)driver;
+
+            int i = 1;
+            string newsDate = "", dateNow = "";
+            while (true)
+            {
+                string script = @"
+                var timeElement = document.evaluate('//*[@id=""incCategoryTypes""]/a["+i+"]/div/div[2]/div[1]/div[2]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+                "if (timeElement) {return timeElement.textContent;} else {return null;}";
+
+                newsDate = jsExecutor.ExecuteScript(script)?.ToString();
+                
+                if (newsDate == null)
+                {
+                    i++;
+                    continue;
+                }
+                newsDate = newsDate.Substring(0, newsDate.IndexOf(","));
+                newsDate = ParseTime(newsDate);
+                MessageBox.Show(newsDate);
+                DateTime currentTime = DateTime.Now;
+                dateNow = currentTime.ToString("dd.MM.yyyy");
+
+                if (newsDate.Equals(dateNow))
+                {
+                    script = @"
+                    var link = document.evaluate('//*[@id=""incCategoryTypes""]/a["+(i++)+"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+                    "if (link){link.click();}else{console.log('Link not found');}";
+                    jsExecutor.ExecuteScript(script);
+
+                    script = @"
+                    var h1Element = document.evaluate('/html/body/div[1]/div/div[2]/div[1]/article/div[1]/div[3]/div[1]/div[2]/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                    if (h1Element)
+                    {
+                        return h1Element.textContent;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    ";
+
+                    string newsHeader = jsExecutor.ExecuteScript(script)?.ToString();
+
+                    script = @"
+                    var paragraphs = document.evaluate('//*[@id=""incArticle""]/p', document, null, 
+                        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+                    var texts = '';
+                    for (var i = 0; i < paragraphs.snapshotLength; i++) {
+                        texts += paragraphs.snapshotItem(i).innerText + ' ';
+                    }
+                    return texts.trim();
+                    ";
+
+                    string newsText = (string)jsExecutor.ExecuteScript(script);
+
+                    Add_Document_with_CustomID(site, EncodeTextForFirestore(newsHeader), newsText, newsDate);
+                    driver.Navigate().Back();
+                }
+                else
+                {
+                    driver.Close();
+                    break;
+                }
+            }
+        }
+        private void readWriteNews()
+        {
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--window-size=600,800");
+
+            IWebDriver driver = new ChromeDriver(options);
+            driver.Navigate().GoToUrl("https://readwrite.com/category/ai/");
+
+            string site = "Readwrite";
+            IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)driver;
+
+            int i = 1;
+            string newsDate = "", dateNow = "";
+            while (true)
+            {
+                string script = @"
+                var link = document.evaluate('/html/body/main/section[1]/div/div/div/div[1]/div[1]/div/div[2]/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+                "if (link){link.click();}else{console.log('Link not found');}";
+                jsExecutor.ExecuteScript(script);
+
+                script = @"
+                var timeElement = document.evaluate('/html/body/main/section[1]/div/div/div/div/div/div/div[1]/div[2]/div/div[4]/span/time', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+                "if (timeElement) {return timeElement.textContent;} else {return null;}";
+
+                newsDate = jsExecutor.ExecuteScript(script)?.ToString();
+                MessageBox.Show(newsDate);
+
+                if (newsDate == null)
+                {
+                    i++;
+                    continue;
+                }
+
+                DateTime currentTime = DateTime.Now;
+
+                newsDate = ParseTime(newsDate);
+                dateNow = currentTime.ToString("dd.MM.yyyy");
+
+                if (newsDate.Equals(dateNow))
+                {
+                    
+
+                    script = @"
+                    var h1Element = document.evaluate('//*[@id=""wrapper""]/div/div[1]/article/div[1]/div/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                    if (h1Element)
+                    {
+                        return h1Element.textContent;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    ";
+
+                    string haberBasligi = jsExecutor.ExecuteScript(script)?.ToString();
+
+                    script = @"
+                    var paragraphs = document.evaluate('//*[@id=""wrapper""]/div/div[1]/article/div[3]/div/div[2]/div[1]/p', document, null, 
+                        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+                    var texts = '';
+                    for (var i = 0; i < paragraphs.snapshotLength; i++) {
+                        texts += paragraphs.snapshotItem(i).innerText + ' ';
+                    }
+                    return texts.trim();
+                    ";
+
+                    string newsText = (string)jsExecutor.ExecuteScript(script);
+
+                    Add_Document_with_CustomID(site, EncodeTextForFirestore(haberBasligi), newsText, newsDate);
+                    driver.Navigate().Back();
+                }
+                else
+                {
+                    driver.Close();
+                    break;
+                }
+            }
+        }
 
 
 
         static string ParseTime(string timeText)
         {
             DateTime currentDate = DateTime.Now;
-           // MessageBox.Show(timeText);
             if (timeText.Contains("hours") || timeText.Contains("saat") || timeText.Contains("hour"))
             {
                 int hours = int.Parse(timeText.Split(' ')[0]);
                 return currentDate.AddHours(-hours).ToString("dd.MM.yyyy");
+            }
+            else if (DateTime.TryParseExact(timeText, new[] { "MMMM d", "MMM d" }, new CultureInfo("en-US"), DateTimeStyles.None, out DateTime date1))
+            {
+                return date1.ToString("dd.MM.yyyy");
             }
             else if (timeText.Contains("mins") || timeText.Contains("min") || timeText.Contains("dakika"))
             {
@@ -670,10 +829,10 @@ namespace haberBot
             {
                 return date.ToString("dd.MM.yyyy");
             }
+
             else
             {
-                DateTime dateTime = DateTime.ParseExact(timeText,"dd MMMM yy", null);
-                return dateTime.ToString("dd.MM.yyyy");
+                throw new ArgumentException("Beklenmeyen zaman formatı");
             }
         }
         static string EncodeTextForFirestore(string input)

@@ -39,8 +39,8 @@
             this.mashable = new System.Windows.Forms.Button();
             this.zdnet = new System.Windows.Forms.Button();
             this.webrazzi = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
+            this.futurism = new System.Windows.Forms.Button();
+            this.readwrite = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
             this.button12 = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -151,23 +151,25 @@
             this.webrazzi.UseVisualStyleBackColor = true;
             this.webrazzi.Click += new System.EventHandler(this.webrazzi_Click);
             // 
-            // button9
+            // futurism
             // 
-            this.button9.Location = new System.Drawing.Point(13, 260);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(112, 23);
-            this.button9.TabIndex = 11;
-            this.button9.Text = "button9";
-            this.button9.UseVisualStyleBackColor = true;
+            this.futurism.Location = new System.Drawing.Point(13, 260);
+            this.futurism.Name = "futurism";
+            this.futurism.Size = new System.Drawing.Size(112, 23);
+            this.futurism.TabIndex = 11;
+            this.futurism.Text = "futurism";
+            this.futurism.UseVisualStyleBackColor = true;
+            this.futurism.Click += new System.EventHandler(this.futurism_Click);
             // 
-            // button10
+            // readwrite
             // 
-            this.button10.Location = new System.Drawing.Point(13, 290);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(112, 23);
-            this.button10.TabIndex = 12;
-            this.button10.Text = "button10";
-            this.button10.UseVisualStyleBackColor = true;
+            this.readwrite.Location = new System.Drawing.Point(13, 290);
+            this.readwrite.Name = "readwrite";
+            this.readwrite.Size = new System.Drawing.Size(112, 23);
+            this.readwrite.TabIndex = 12;
+            this.readwrite.Text = "readwrite";
+            this.readwrite.UseVisualStyleBackColor = true;
+            this.readwrite.Click += new System.EventHandler(this.readwrite_Click);
             // 
             // button11
             // 
@@ -194,8 +196,8 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.button12);
             this.Controls.Add(this.button11);
-            this.Controls.Add(this.button10);
-            this.Controls.Add(this.button9);
+            this.Controls.Add(this.readwrite);
+            this.Controls.Add(this.futurism);
             this.Controls.Add(this.webrazzi);
             this.Controls.Add(this.zdnet);
             this.Controls.Add(this.mashable);
@@ -228,8 +230,8 @@
         private System.Windows.Forms.Button mashable;
         private System.Windows.Forms.Button zdnet;
         private System.Windows.Forms.Button webrazzi;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button futurism;
+        private System.Windows.Forms.Button readwrite;
         private System.Windows.Forms.Button button11;
         private System.Windows.Forms.Button button12;
     }
