@@ -728,12 +728,24 @@ namespace haberBot
             string site = "Readwrite";
             IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)driver;
 
-            int i = 1;
+            string[] scripts = new string[] 
+            {
+            "//*[@id=\"site-content\"]/section[1]/div/div/div/div[1]/div[2]/ul/li[1]/div[2]/h5/a",
+            "//*[@id=\"site-content\"]/section[1]/div/div/div/div[1]/div[2]/ul/li[2]/div[2]/h5/a",
+            "//*[@id=\"site-content\"]/section[1]/div/div/div/div[1]/div[2]/ul/li[3]/div[2]/h5/a",
+            "//*[@id=\"site-content\"]/section[1]/div/div/div/div[1]/div[2]/ul/div/div[1]/div[2]/h5/a",
+            "//*[@id=\"site-content\"]/section[1]/div/div/div/div[1]/div[2]/ul/div/div[2]/div[2]/h5/a",
+            "//*[@id=\"site-content\"]/section[1]/div/div/div/div[1]/div[2]/ul/div/div[3]/div[2]/h5/a"
+            };
+
+            
+
+            int i = 0;
             string newsDate = "", dateNow = "";
-            while (true)
+            while (i<=6)
             {
                 string script = @"
-                var link = document.evaluate('/html/body/main/section[1]/div/div/div/div[1]/div[1]/div/div[2]/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+                var link = document.evaluate('" + scripts[i++] +"', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
                 "if (link){link.click();}else{console.log('Link not found');}";
                 jsExecutor.ExecuteScript(script);
 
@@ -742,7 +754,7 @@ namespace haberBot
                 "if (timeElement) {return timeElement.textContent;} else {return null;}";
 
                 newsDate = jsExecutor.ExecuteScript(script)?.ToString();
-                MessageBox.Show(newsDate);
+                newsDate = newsDate.Substring(newsDate.IndexOf(":") + 2);
 
                 if (newsDate == null)
                 {
@@ -757,10 +769,9 @@ namespace haberBot
 
                 if (newsDate.Equals(dateNow))
                 {
-                    
 
                     script = @"
-                    var h1Element = document.evaluate('//*[@id=""wrapper""]/div/div[1]/article/div[1]/div/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                    var h1Element = document.evaluate('//*[@id=""site-content""]/section[1]/div/div/div/div/div/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
                     if (h1Element)
                     {
                         return h1Element.textContent;
@@ -774,7 +785,7 @@ namespace haberBot
                     string haberBasligi = jsExecutor.ExecuteScript(script)?.ToString();
 
                     script = @"
-                    var paragraphs = document.evaluate('//*[@id=""wrapper""]/div/div[1]/article/div[3]/div/div[2]/div[1]/p', document, null, 
+                    var paragraphs = document.evaluate('//*[@id=""post-295990""]/div/div/div[1]/div[2]/p', document, null, 
                         XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
                     var texts = '';
                     for (var i = 0; i < paragraphs.snapshotLength; i++) {
@@ -787,6 +798,8 @@ namespace haberBot
 
                     Add_Document_with_CustomID(site, EncodeTextForFirestore(haberBasligi), newsText, newsDate);
                     driver.Navigate().Back();
+
+
                 }
                 else
                 {
@@ -806,10 +819,6 @@ namespace haberBot
                 int hours = int.Parse(timeText.Split(' ')[0]);
                 return currentDate.AddHours(-hours).ToString("dd.MM.yyyy");
             }
-            else if (DateTime.TryParseExact(timeText, new[] { "MMMM d", "MMM d" }, new CultureInfo("en-US"), DateTimeStyles.None, out DateTime date1))
-            {
-                return date1.ToString("dd.MM.yyyy");
-            }
             else if (timeText.Contains("mins") || timeText.Contains("min") || timeText.Contains("dakika"))
             {
                 int minutes = int.Parse(timeText.Split(' ')[0]);
@@ -825,11 +834,14 @@ namespace haberBot
                 int weeks = int.Parse(timeText.Split(' ')[0]);
                 return currentDate.AddDays(-weeks * 7).ToString("dd.MM.yyyy");
             }
-            else if (DateTime.TryParseExact(timeText, new[] { "d MMMM yyyy", "dd MMMM yyyy" }, new CultureInfo("tr-TR"), DateTimeStyles.None, out DateTime date))
+            else if (DateTime.TryParseExact(timeText, new[] { "d MMMM yyyy", "dd MMMM yyyy", "dd MMM, yyyy" }, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
             {
                 return date.ToString("dd.MM.yyyy");
             }
-
+            else if (DateTime.TryParseExact(timeText, new[] { "MMMM d", "MMM d" }, new CultureInfo("en-US"), DateTimeStyles.None, out DateTime date1))
+            {
+                return date1.ToString("dd.MM.yyyy");
+            }
             else
             {
                 throw new ArgumentException("Beklenmeyen zaman formatı");
