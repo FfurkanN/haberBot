@@ -18,6 +18,7 @@ using System.Xml.Linq;
 using OpenQA.Selenium.Interactions;
 using SeleniumExtras.WaitHelpers;
 using System.Text.RegularExpressions;
+using System.CodeDom.Compiler;
 
 namespace haberBot
 {
@@ -31,7 +32,6 @@ namespace haberBot
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //31
             string path = AppDomain.CurrentDomain.BaseDirectory + @"haberbot.json";
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
 
@@ -103,30 +103,27 @@ namespace haberBot
             driver1.Navigate().GoToUrl("https://www.techinside.com/yapay-zeka/");
 
             string haber_site = "Tech inside";
+            IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)driver1;
 
             for (int i = 1; i <= 10; i++)
             {
-                string haber_tarih = driver1.FindElement(By.XPath("//*[@id=\"tdi_70\"]/div[" + i + "]/div/div[2]/div[2]/span/span[2]/time")).Text;
+                string script = @"
+                var timeElement = document.evaluate('/html/body/div[6]/div[2]/div/div/div/div[2]/div/div[1]/div/div/div[1]/div["+i+"]/div/div[2]/div[2]/span/span[2]/time', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;"+
+                "if (timeElement) {return timeElement.textContent;} else {return null;}";
 
+                string haber_tarih = (string)jsExecutor.ExecuteScript(script);
+                MessageBox.Show(haber_tarih);
                 int x = haber_tarih.IndexOf("|");
-                int y = haber_tarih.IndexOf(":");
-                int haber_saat = Int32.Parse(haber_tarih.Substring(x + 2, y - x - 2));
-                int haber_dakika = Int32.Parse(haber_tarih.Substring(y + 1));
-
-
 
                 DateTime now = DateTime.Now;
                 string tarih = now.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"));
-                int saat = Int32.Parse(now.ToString("HH", new CultureInfo("tr-TR")));
-                int dakika = Int32.Parse(now.ToString("mm", new CultureInfo("tr-TR")));
 
-                if (haber_tarih.Substring(0, --x).ToLower().Equals(tarih.ToLower()) && haber_saat <= saat)
+                if (haber_tarih.Substring(0, --x).ToLower().Equals(tarih.ToLower()))
                 {
-
-                    IWebElement link = driver1.FindElement(By.XPath("//*[@id=\"tdi_70\"]/div[" + i + "]/div/div[2]/h3/a"));
-
-                    IJavaScriptExecutor js = (IJavaScriptExecutor)driver1;
-                    js.ExecuteScript("arguments[0].click();", link);
+                    script = @"
+                    var link = document.evaluate('//*[@id=""tdi_70""]/div[" + i + "]/div/div[2]/h3/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+                    "if (link){link.click();}else{console.log('Link not found');}";
+                    jsExecutor.ExecuteScript(script);
 
                     Thread.Sleep(1000);
 
@@ -135,19 +132,27 @@ namespace haberBot
                     driver1.SwitchTo().Window(windowHandles[1]);
 
                     string haberBasligi = driver1.FindElement(By.XPath("//*[@id=\"tdi_60\"]/div/div/div/div[3]/div/h1")).Text;
-                    string icerik = "";
 
-                    foreach (IWebElement test in driver1.FindElements(By.XPath("//*[@id=\"tdi_72\"]/div/div[2]/div/div[3]/div/p")))
-                    {
-                        icerik += test.Text;
+                    script = @"
+                    var paragraphs = document.evaluate('//*[@id=""tdi_72""]/div/div[2]/div/div[3]/div/p', document, null, 
+                        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+                    var texts = '';
+                    for (var i = 0; i < paragraphs.snapshotLength; i++) {
+                        texts += paragraphs.snapshotItem(i).innerText + ' ';
                     }
-                    Add_Document_with_CustomID(haber_site, EncodeTextForFirestore(haberBasligi), icerik, haber_tarih);
+                    return texts.trim();
+                    ";
+
+                    string newsText = (string)jsExecutor.ExecuteScript(script);
+
+                    Add_Document_with_CustomID(haber_site, EncodeTextForFirestore(haberBasligi), newsText, haber_tarih);
                     driver1.Close();
                     driver1.SwitchTo().Window(windowHandles[0]);
                 }
                 else
                 {
                     driver1.Close();
+                    break;
                 }
             }
             driver1.Close();
@@ -246,7 +251,7 @@ namespace haberBot
                             Console.WriteLine("Kapatma butonu bulunamadı.");
                         }
 
-                        if (closeButton != null)
+                        if (closeButton != null) 
                         {
                             closeButton.Click();
                         }
