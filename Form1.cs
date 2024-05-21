@@ -409,7 +409,7 @@ namespace haberBot
 
         private void test()
         {
-            MessageBox.Show("Hello");
+            MessageBox.Show("Main");
         }
 
     }
