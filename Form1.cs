@@ -131,7 +131,19 @@ namespace haberBot
 
                     driver1.SwitchTo().Window(windowHandles[1]);
 
-                    string haberBasligi = driver1.FindElement(By.XPath("//*[@id=\"tdi_60\"]/div/div/div/div[3]/div/h1")).Text;
+                    script = @"
+                    var h1Element = document.evaluate('//*[@id=""tdi_60""]/div/div/div/div[3]/div/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                    if (h1Element)
+                    {
+                        return h1Element.textContent;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    ";
+
+                    string haberBasligi = jsExecutor.ExecuteScript(script)?.ToString();
 
                     script = @"
                     var paragraphs = document.evaluate('//*[@id=""tdi_72""]/div/div[2]/div/div[3]/div/p', document, null, 
@@ -162,35 +174,72 @@ namespace haberBot
         {
             IWebDriver driver = new ChromeDriver();
             driver.Navigate().GoToUrl("https://shiftdelete.net/yapay-zeka");
+            IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)driver;
 
             string site = "ShiftDelete.Net";
 
             for (int i = 1; i <= 10; i++)
             {
-                IWebElement link = driver.FindElement(By.XPath("//*[@id=\"wrapper\"]/div[4]/div/div/div/div[1]/div[" + i + "]/div/div[1]/h4/a"));
+                string script = @"
+                var element = document.evaluate('//*[@id=""wrapper""]/div[4]/div/div/div/div[1]/div["+i+"]/div/aside[2]/span[2]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;"+
+                "if (element){return element.textContent;}else{return null;}";
 
-                //MessageBox.Show(newsHeader);
-                IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-                js.ExecuteScript("arguments[0].click();", link);
+                string newsDate = jsExecutor.ExecuteScript(script)?.ToString();
 
-                Thread.Sleep(1000);
-                var windowHandles = driver.WindowHandles;
-                driver.SwitchTo().Window(windowHandles[1]);
-                string newsHeader = driver.FindElement(By.XPath("html/body/div/div[2]/div/div/article/div/div/div[1]/header/h1")).Text;
+                DateTime currentTime = DateTime.Now;
+                DateTime postTime = currentTime.Add(-ParseTime(newsDate));
+                string date = currentTime.ToString();
 
 
-                string contents = "";
-                foreach (IWebElement paragraphs in driver.FindElements(By.XPath("/html/body/div/div[2]/div/div/article/div/div/div[2]/div[1]/div[2]/p")))
+                if (postTime.ToString("dd.MM.yyyy").Equals(date.Substring(0, date.IndexOf(" "))))
                 {
-                    contents += paragraphs.Text;
-                    MessageBox.Show(contents);
-                }
-                driver.Close();
-                driver.SwitchTo().Window(windowHandles[0]);
+                    script = @"
+                    var element = document.evaluate('//*[@id=""wrapper""]/div[4]/div/div/div/div[1]/div["+i+"]/div/div[1]/h4/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;"+
+                    "if (element){element.click();}else{console.log('Element not found.');}";
+                    jsExecutor.ExecuteScript(script);
 
+                    Thread.Sleep(1000);
+
+                    var windowHandles = driver.WindowHandles;
+                    driver.SwitchTo().Window(windowHandles[1]);
+
+                    script = @"
+                    var element = document.evaluate('/html/body/div/div[2]/div/div/article/div/div/div[1]/header/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                    if (element) {
+                        return element.textContent;
+                    } else {
+                        return null;
+                    }
+                    ";
+
+                    string newsHeader = jsExecutor.ExecuteScript(script)?.ToString();
+                    MessageBox.Show(newsHeader);
+
+                    script = @"
+                    var paragraphs = document.evaluate('/html/body/div/div[2]/div/div/article/div/div/div[2]/div[1]/div[2]/p', document, null, 
+                        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+                    var texts = '';
+                    for (var i = 0; i < paragraphs.snapshotLength; i++) {
+                        texts += paragraphs.snapshotItem(i).innerText + ' ';
+                    }
+                    return texts.trim();
+                    ";
+
+                    string newsText = (string)jsExecutor.ExecuteScript(script);
+
+                    Add_Document_with_CustomID(site, EncodeTextForFirestore(newsHeader), newsText, postTime.ToString("dd.MM.yyyy"));
+
+                    driver.Close();
+                    driver.SwitchTo().Window(windowHandles[0]);
+                }
+                else
+                {
+                    driver.Close();
+                    break;
+                }
             }
         }
-
+        
 
         private void technologyreview_Click(object sender, EventArgs e)
         {
@@ -221,8 +270,10 @@ namespace haberBot
                 {
                     string news_date = postTime.ToString("dd.MM.yyyy");
 
-                    IWebElement link = driver1.FindElement(By.XPath("//*[@id=\"content\"]/div/div[1]/ul/li[" + i + "]/div/div[1]/header/h3/a"));
-                    jsExecutor.ExecuteScript("arguments[0].click();", link);
+                    script = @"
+                    var element = document.evaluate('//*[@id=\""content\""]/div/div[1]/ul/li[" + i + "]/div/div[1]/header/h3/a', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+                    "if (element){element.click();}else{console.log('Element not found.');}";
+                    jsExecutor.ExecuteScript(script);
 
                     WebDriverWait wait = new WebDriverWait(driver1, TimeSpan.FromSeconds(10));
 
@@ -257,8 +308,10 @@ namespace haberBot
                         }
                         driver1.SwitchTo().DefaultContent();
                     }
+                    script = @"var h1Element = document.evaluate('/html/body/div[1]/div[1]/main/div[1]/div[1]/header/div[1]/div[1]/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                    if (h1Element){return h1Element.textContent;}else{return null;}";
 
-                    string news_Header = driver1.FindElement(By.XPath("/html/body/div[1]/div[1]/main/div[1]/div[1]/header/div[1]/div[1]/h1")).Text;
+                    string newsHeader = jsExecutor.ExecuteScript(script)?.ToString();
 
                     script = @"
                     var paragraphs = document.evaluate('//*[@id=""content--body""]//p', document, null, 
@@ -272,7 +325,7 @@ namespace haberBot
 
                     string allParagraphTexts = (string)jsExecutor.ExecuteScript(script);
                     frekans(allParagraphTexts);
-                    Add_Document_with_CustomID(news_site, EncodeTextForFirestore(news_Header), allParagraphTexts, news_date);
+                    Add_Document_with_CustomID(news_site, EncodeTextForFirestore(newsHeader), allParagraphTexts, news_date);
 
                     driver1.Navigate().Back();
                 }
@@ -383,22 +436,22 @@ namespace haberBot
 
         static TimeSpan ParseTime(string timeText)
         {
-            if (timeText.Contains("hours"))
+            if (timeText.Contains("hours") || timeText.Contains("saat"))
             {
                 int hours = int.Parse(timeText.Split(' ')[0]);
                 return TimeSpan.FromHours(hours);
             }
-            else if (timeText.Contains("mins"))
+            else if (timeText.Contains("mins") || timeText.Contains("dakika"))
             {
                 int minutes = int.Parse(timeText.Split(' ')[0]);
                 return TimeSpan.FromMinutes(minutes);
             }
-            else if (timeText.Contains("days"))
+            else if (timeText.Contains("days") || timeText.Contains("gün"))
             {
                 int days = int.Parse(timeText.Split(' ')[0]);
                 return TimeSpan.FromDays(days);
             }
-            else if (timeText.Contains("week") || timeText.Contains("weeks"))
+            else if (timeText.Contains("week") || timeText.Contains("weeks") || timeText.Contains("hafta"))
             {
                 int weeks = int.Parse(timeText.Split(' ')[0]);
                 return TimeSpan.FromDays(weeks * 7);
