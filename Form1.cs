@@ -39,6 +39,11 @@ namespace haberBot
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
 
             database = FirestoreDb.Create("haberbot");
+
+            panel1.BorderStyle = BorderStyle.None;
+            panel1.BackColor = Color.Transparent;
+            documentPanel.BorderStyle = BorderStyle.None;
+            documentPanel.BackColor = Color.Transparent;
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -74,6 +79,40 @@ namespace haberBot
                 {
                     richTextBox1.Text += string.Format("{0}: {1}\n", item.Key, item.Value);
                 }
+            }
+        }
+        private async void GetNewsDocument(string collection)
+        {
+            documentPanel.Controls.Clear();
+            CollectionReference newsColletion = database.Collection(collection);
+            QuerySnapshot snapshots = await newsColletion.GetSnapshotAsync();
+            int y=5; ;
+            foreach (DocumentSnapshot documentSnapshot in snapshots.Documents)
+            {
+                Button btn = new Button();
+                btn.Text = documentSnapshot.Id;
+                btn.Width = 195;
+                btn.Height = 60;
+                btn.Location = new Point(2, y);
+                btn.BackColor = Color.FromArgb(92, 92, 92);
+                btn.Click += (sender, e) => getNewsDocumentText(collection, documentSnapshot.Id);
+
+                documentPanel.Controls.Add(btn);
+                y += 65;
+            }
+        }
+        private async void getNewsDocumentText(string collection, string documentName)
+        {
+            newsRichTextbox.Text = "";
+            DocumentReference docRef = database.Collection(collection).Document(documentName);
+            DocumentSnapshot docSnap = await docRef.GetSnapshotAsync();
+
+            Haber haber = docSnap.ConvertTo<Haber>();
+            if (docSnap.Exists)
+            {
+                newsRichTextbox.Text += haber.HaberBasligi + "\n\n";
+                newsRichTextbox.Text += haber.HaberIcerigi + "\n\n";
+                newsRichTextbox.Text += haber.Tarih + "\n\n";
             }
         }
 
@@ -131,35 +170,35 @@ namespace haberBot
         }
         private void techInside_Click(object sender, EventArgs e)
         {
-            techInsideNews();
+            GetNewsDocument("Tech inside");
         }
         private void shiftDelete_Click(object sender, EventArgs e)
         {
-            shiftdeleteNews();
+            GetNewsDocument("ShiftDelete.Net");
         }
         private void technologyreview_Click(object sender, EventArgs e)
         {
-            technologyReviewNews();
+            GetNewsDocument("Technology Review");
         }
         private void mashable_Click(object sender, EventArgs e)
         {
-            mashableNews();
+            GetNewsDocument("Mashable");
         }
         private void zdnet_Click(object sender, EventArgs e)
         {
-            zdnetNews();
+            GetNewsDocument("Zdnet");
         }
         private void webrazzi_Click(object sender, EventArgs e)
         {
-            webrazziNews();
+            GetNewsDocument("Webrazzi");
         }
         private void futurism_Click(object sender, EventArgs e)
         {
-            futurismNews();
+            GetNewsDocument("Futurism");
         }
         private void readwrite_Click(object sender, EventArgs e)
         {
-            readWriteNews();
+            GetNewsDocument("Readwrite");
         }
 
         private void techInsideNews()
@@ -1049,6 +1088,7 @@ namespace haberBot
                 textBox1.Text += text;
             }
         }
+
 
     }
 }
