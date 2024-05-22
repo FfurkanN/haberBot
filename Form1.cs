@@ -897,13 +897,13 @@ namespace haberBot
         {
             HashSet<string> stopWords = new HashSet<string>();
 
-            foreach (var line in File.ReadLines("tr_stopword.txt"))
+            foreach (var line in File.ReadLines("C:\\Users\\pc-fu\\Desktop\\haberBot\\tr_stopword.txt"))
             {
                 stopWords.Add(line.Trim().ToLower());
             }
 
             // İngilizce stop words dosyası
-            foreach (var line in File.ReadLines("en_stopword.txt"))
+            foreach (var line in File.ReadLines("C:\\Users\\pc-fu\\Desktop\\haberBot\\en_stopword.txt"))
             {
                 stopWords.Add(line.Trim().ToLower());
             }

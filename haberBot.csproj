@@ -250,7 +250,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="en_stopword.txt" />
-    <Content Include="tr_stopword.txt" />
+    <Content Include="tr_stopword.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Selenium.WebDriver.4.21.0\build\Selenium.WebDriver.targets" Condition="Exists('packages\Selenium.WebDriver.4.21.0\build\Selenium.WebDriver.targets')" />
