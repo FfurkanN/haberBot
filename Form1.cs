@@ -20,6 +20,7 @@ using SeleniumExtras.WaitHelpers;
 using System.Text.RegularExpressions;
 using System.CodeDom.Compiler;
 using System.Timers;
+using Google.Cloud.Firestore.V1;
 
 namespace haberBot
 {
@@ -670,7 +671,6 @@ namespace haberBot
                 }
                 newsDate = newsDate.Substring(0, newsDate.IndexOf(","));
                 newsDate = ParseTime(newsDate);
-                MessageBox.Show(newsDate);
                 DateTime currentTime = DateTime.Now;
                 dateNow = currentTime.ToString("dd.MM.yyyy");
 
@@ -680,9 +680,9 @@ namespace haberBot
                     var link = document.evaluate('//*[@id=""incCategoryTypes""]/a["+(i++)+"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
                     "if (link){link.click();}else{console.log('Link not found');}";
                     jsExecutor.ExecuteScript(script);
-
+                    Thread.Sleep(2000);
                     script = @"
-                    var h1Element = document.evaluate('/html/body/div[1]/div/div[2]/div[1]/article/div[1]/div[3]/div[1]/div[2]/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                    var h1Element = document.evaluate('//*[@id=""__next""]/main/article/header/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
                     if (h1Element)
                     {
                         return h1Element.textContent;
@@ -694,6 +694,25 @@ namespace haberBot
                     ";
 
                     string newsHeader = jsExecutor.ExecuteScript(script)?.ToString();
+
+                    if(newsHeader == null)
+                    {
+                        script = @"
+                        var h1Element = document.evaluate('//*[@id=""__next""]/div/div[2]/div[1]/article/div[1]/div[3]/div[1]/div[2]/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                        if (h1Element)                  
+                        {
+                            return h1Element.textContent;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                        ";
+
+                         newsHeader = jsExecutor.ExecuteScript(script)?.ToString();
+                    }
+
+                    MessageBox.Show(newsHeader);
 
                     script = @"
                     var paragraphs = document.evaluate('//*[@id=""incArticle""]/p', document, null, 
@@ -735,7 +754,8 @@ namespace haberBot
             "//*[@id=\"site-content\"]/section[1]/div/div/div/div[1]/div[2]/ul/li[3]/div[2]/h5/a",
             "//*[@id=\"site-content\"]/section[1]/div/div/div/div[1]/div[2]/ul/div/div[1]/div[2]/h5/a",
             "//*[@id=\"site-content\"]/section[1]/div/div/div/div[1]/div[2]/ul/div/div[2]/div[2]/h5/a",
-            "//*[@id=\"site-content\"]/section[1]/div/div/div/div[1]/div[2]/ul/div/div[3]/div[2]/h5/a"
+            "//*[@id=\"site-content\"]/section[1]/div/div/div/div[1]/div[2]/ul/div/div[3]/div[2]/h5/a",
+            ""
             };
 
             
@@ -744,6 +764,7 @@ namespace haberBot
             string newsDate = "", dateNow = "";
             while (i<=6)
             {
+               
                 string script = @"
                 var link = document.evaluate('" + scripts[i++] +"', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
                 "if (link){link.click();}else{console.log('Link not found');}";
@@ -785,27 +806,46 @@ namespace haberBot
                     string haberBasligi = jsExecutor.ExecuteScript(script)?.ToString();
 
                     script = @"
-                    var paragraphs = document.evaluate('//*[@id=""post-295990""]/div/div/div[1]/div[2]/p', document, null, 
-                        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-                    var texts = '';
-                    for (var i = 0; i < paragraphs.snapshotLength; i++) {
-                        texts += paragraphs.snapshotItem(i).innerText + ' ';
-                    }
-                    return texts.trim();
+                        var paragraphs = document.evaluate(
+                            ""//div[contains(@class, 'entry-content')]//p"", 
+                            document, 
+                            null, 
+                            XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, 
+                            null
+                        );
+                        var texts = '';
+                        for (var i = 0; i < paragraphs.snapshotLength; i++) {
+                            texts += paragraphs.snapshotItem(i).innerText + ' ';
+                        }
+                        return texts.trim();
                     ";
 
                     string newsText = (string)jsExecutor.ExecuteScript(script);
+                    if(newsText == null)
+                    {
+                        script = @"                      
+                        var paragraphs = document.evaluate('/html/body/main/article/div/div/div[1]/div[2]/p', document, null,
+                            XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+                        var texts = '';
+                        for (var i = 0; i < paragraphs.snapshotLength; i++)
+                        {
+                            texts += paragraphs.snapshotItem(i).innerText + ' ';
+                        }
+                        return texts.trim();
+                        ";
+
+                        newsText = (string)jsExecutor.ExecuteScript(script);
+                    }
 
                     Add_Document_with_CustomID(site, EncodeTextForFirestore(haberBasligi), newsText, newsDate);
                     driver.Navigate().Back();
-
-
                 }
                 else
                 {
                     driver.Close();
                     break;
                 }
+                MessageBox.Show(i.ToString());
             }
         }
 
