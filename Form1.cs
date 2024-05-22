@@ -48,14 +48,15 @@ namespace haberBot
             GetAllData_From_A_Collection();
         }
 
-        private void Add_Document_with_CustomID(string site, string baslik, string icerik, string tarih)
+        private void Add_Document_with_CustomID(string site, string baslik, string icerik, string tarih, Dictionary<string,int> frequency)
         {
             DocumentReference doc = database.Collection(site).Document(baslik);
             Dictionary<string, object> data = new Dictionary<string, object>()
             {
                 {"HaberBasligi",baslik },
                 {"HaberIcerigi", icerik },
-                {"Tarih", tarih }
+                {"Tarih", tarih },
+                {"frekanslar", frequency}
             };
             doc.SetAsync(data);
         }
@@ -96,7 +97,8 @@ namespace haberBot
 
         private void run_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show(Directory.GetCurrentDirectory());
+            textBox1.Text = Directory.GetCurrentDirectory();
         }
         private void techInside_Click(object sender, EventArgs e)
         {
@@ -190,7 +192,7 @@ namespace haberBot
 
                     string newsText = (string)jsExecutor.ExecuteScript(script);
 
-                    Add_Document_with_CustomID(haber_site, EncodeTextForFirestore(haberBasligi), newsText, haber_tarih);
+                    Add_Document_with_CustomID(haber_site, EncodeTextForFirestore(haberBasligi), newsText, haber_tarih, frequency(newsText));
                     driver1.Close();
                     driver1.SwitchTo().Window(windowHandles[0]);
                 }
@@ -200,7 +202,6 @@ namespace haberBot
                     break;
                 }
             }
-            driver1.Close();
         }
         private void shiftdeleteNews()
         {
@@ -260,7 +261,7 @@ namespace haberBot
 
                     string newsText = (string)jsExecutor.ExecuteScript(script);
 
-                    Add_Document_with_CustomID(site, EncodeTextForFirestore(newsHeader), newsText, newsDate);
+                    Add_Document_with_CustomID(site, EncodeTextForFirestore(newsHeader), newsText, newsDate, frequency(newsText));
 
                     driver.Close();
                     driver.SwitchTo().Window(windowHandles[0]);
@@ -353,9 +354,8 @@ namespace haberBot
                     return texts.trim();
                     ";
 
-                    string allParagraphTexts = (string)jsExecutor.ExecuteScript(script);
-                    frekans(allParagraphTexts);
-                    Add_Document_with_CustomID(news_site, EncodeTextForFirestore(newsHeader), allParagraphTexts, news_date);
+                    string newsText = (string)jsExecutor.ExecuteScript(script);
+                    Add_Document_with_CustomID(news_site, EncodeTextForFirestore(newsHeader), newsText, news_date, frequency(newsText));
 
                     driver1.Navigate().Back();
                 }
@@ -410,7 +410,7 @@ namespace haberBot
                     ";
                     string newsText = (string)jsExecutor.ExecuteScript(script);
 
-                    Add_Document_with_CustomID(news_site, EncodeTextForFirestore(news_Header), newsText, newsDate);
+                    Add_Document_with_CustomID(news_site, EncodeTextForFirestore(news_Header), newsText, newsDate, frequency(newsText));
                     driver1.Navigate().Back();
                 }
                 else
@@ -456,7 +456,7 @@ namespace haberBot
                     ";
                     string newsText = (string)jsExecutor.ExecuteScript(script);
 
-                    Add_Document_with_CustomID(news_site, EncodeTextForFirestore(news_Header), newsText, newsDate);
+                    Add_Document_with_CustomID(news_site, EncodeTextForFirestore(news_Header), newsText, newsDate, frequency(newsText));
                     driver1.Navigate().Back();
                     a++;
                 }
@@ -562,7 +562,7 @@ namespace haberBot
 
                     string newsText = (string)jsExecutor.ExecuteScript(script);
 
-                    Add_Document_with_CustomID(haber_site, EncodeTextForFirestore(haberBasligi), newsText, newsDate);
+                    Add_Document_with_CustomID(haber_site, EncodeTextForFirestore(haberBasligi), newsText, newsDate, frequency(newsText));
                     driver.Navigate().Back();
                 }
                 else
@@ -635,7 +635,7 @@ namespace haberBot
 
                     string newsText = (string)jsExecutor.ExecuteScript(script);
 
-                    Add_Document_with_CustomID(haber_site, EncodeTextForFirestore(haberBasligi), newsText, newsDate);
+                    Add_Document_with_CustomID(haber_site, EncodeTextForFirestore(haberBasligi), newsText, newsDate, frequency(newsText));
                     driver.Navigate().Back();
                 }
                 else
@@ -726,7 +726,7 @@ namespace haberBot
 
                     string newsText = (string)jsExecutor.ExecuteScript(script);
 
-                    Add_Document_with_CustomID(site, EncodeTextForFirestore(newsHeader), newsText, newsDate);
+                    Add_Document_with_CustomID(site, EncodeTextForFirestore(newsHeader), newsText, newsDate, frequency(newsText));
                     driver.Navigate().Back();
                 }
                 else
@@ -837,7 +837,7 @@ namespace haberBot
                         newsText = (string)jsExecutor.ExecuteScript(script);
                     }
 
-                    Add_Document_with_CustomID(site, EncodeTextForFirestore(haberBasligi), newsText, newsDate);
+                    Add_Document_with_CustomID(site, EncodeTextForFirestore(haberBasligi), newsText, newsDate, frequency(newsText));
                     driver.Navigate().Back();
                 }
                 else
@@ -887,27 +887,27 @@ namespace haberBot
                 throw new ArgumentException("Beklenmeyen zaman formatı");
             }
         }
+
         static string EncodeTextForFirestore(string input)
         {
             string firestoreText = input.Replace("/", "-");
             return firestoreText;
         }
-
-        void frekans(string text)
+        private Dictionary<string, int> frequency(string text)
         {
             HashSet<string> stopWords = new HashSet<string>();
 
-            foreach (var line in File.ReadLines("C:\\Users\\pc-fu\\Desktop\\haberBot\\tr_stopword.txt"))
+            // Türkçe stop words dosyası
+            foreach (var line in File.ReadLines("tr_stopword.txt"))
             {
                 stopWords.Add(line.Trim().ToLower());
             }
 
             // İngilizce stop words dosyası
-            foreach (var line in File.ReadLines("C:\\Users\\pc-fu\\Desktop\\haberBot\\en_stopword.txt"))
+            foreach (var line in File.ReadLines("en_stopword.txt"))
             {
                 stopWords.Add(line.Trim().ToLower());
             }
-
 
             // Metni temizleme ve kelimelere ayırma
             string cleanedText = Regex.Replace(text.ToLower(), @"[^\w\s]", ""); // Noktalama işaretlerini kaldır ve küçük harfe çevir
@@ -929,19 +929,21 @@ namespace haberBot
                         wordFrequency[word] = 1;
                     }
                 }
-                
             }
 
-            // Sonuçları yazdırma
+            // Frekansı 5 ve 5'ten büyük olan kelimeleri içeren yeni bir sözlük oluşturma
+            Dictionary<string, int> filteredWordFrequency = new Dictionary<string, int>();
+
             foreach (var kvp in wordFrequency)
             {
-                if(kvp.Value >= 5)
+                if (kvp.Value >= 5)
                 {
-                    MessageBox.Show($"Kelime: {kvp.Key}, Frekans: {kvp.Value}");
+                    filteredWordFrequency[kvp.Key] = kvp.Value;
                 }
             }
-        }
 
+            return filteredWordFrequency;
+        }
 
     }
 }
