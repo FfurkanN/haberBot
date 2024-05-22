@@ -21,6 +21,7 @@ using System.Text.RegularExpressions;
 using System.CodeDom.Compiler;
 using System.Timers;
 using Google.Cloud.Firestore.V1;
+using System.Security.Policy;
 
 namespace haberBot
 {
@@ -97,14 +98,36 @@ namespace haberBot
 
         private void run_Click(object sender, EventArgs e)
         {
-            techInsideNews();
-            shiftdeleteNews();
-            technologyReviewNews();
-            mashableNews();
-            zdnetNews();
-            webrazziNews();
-            futurismNews();
-            readWriteNews();
+            textBox1.Text += "Haber okuma başladı\n";
+            ThreadStart[] threadStarts = new ThreadStart[]
+                {
+                    new ThreadStart( techInsideNews),
+                    new ThreadStart(shiftdeleteNews),
+                    new ThreadStart(technologyReviewNews),
+                    new ThreadStart(mashableNews),
+                    new ThreadStart(zdnetNews),
+                    new ThreadStart(webrazziNews),
+                    new ThreadStart(futurismNews),
+                    new ThreadStart(readWriteNews)
+                };
+            Thread[] threads = new Thread[8];
+            for (int i = 0; i < threads.Length; i++)
+            {
+                threads[i] = new Thread(threadStarts[i]);
+            }
+            // Thread'leri başlatın
+            foreach (Thread thread in threads)
+            {
+                thread.Start();
+            }
+
+            // Tüm thread'lerin bitmesini bekleyin
+            foreach (Thread thread in threads)
+            {
+                thread.Join();
+            }
+            textBox1.Text += "Tüm haberler okundu";
+
         }
         private void techInside_Click(object sender, EventArgs e)
         {
@@ -141,7 +164,9 @@ namespace haberBot
 
         private void techInsideNews()
         {
-            IWebDriver driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--disable-gpu");
+            IWebDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("https://www.techinside.com/yapay-zeka/");
 
             string haber_site = "Tech inside";
@@ -247,14 +272,16 @@ namespace haberBot
                 }
                 else
                 {
-                    driver.Close();
+                    driver.Quit();
                     break;
                 }
             }
         }
         private void shiftdeleteNews()
         {
-            IWebDriver driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--disable-gpu");
+            IWebDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("https://shiftdelete.net/yapay-zeka");
             IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)driver;
 
@@ -319,15 +346,16 @@ namespace haberBot
                 }
                 else
                 {
-                    driver.Close();
+                    driver.Quit();
                     break;
                 }
             }
         }
         private void technologyReviewNews()
         {
-            //Düzenlenmesi lazm
-            IWebDriver driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--disable-gpu");
+            IWebDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("https://www.technologyreview.com/topic/artificial-intelligence/");
 
             string news_site = "Technology Review";
@@ -411,7 +439,7 @@ namespace haberBot
                 }
                 else
                 {
-                    driver.Close();
+                    driver.Quit();
                     break;
                 }
             }
@@ -419,7 +447,9 @@ namespace haberBot
         }
         private void mashableNews()
         {
-            IWebDriver driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--disable-gpu");
+            IWebDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("https://mashable.com/category/artificial-intelligence");
 
             string news_site = "Mashable";
@@ -467,7 +497,7 @@ namespace haberBot
                 else
                 {
                     morePost = false;
-                    driver.Close();
+                    driver.Quit();
                     break;
                 }
             }
@@ -513,7 +543,7 @@ namespace haberBot
                 }
                 else
                 {
-                    driver.Close();
+                    driver.Quit();
                     morePost = false;
                     break;
                 }
@@ -521,7 +551,9 @@ namespace haberBot
         }
         private void zdnetNews()
         {
-            IWebDriver driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--disable-gpu");
+            IWebDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("https://www.zdnet.com/topic/artificial-intelligence/");
 
             string haber_site = "Zdnet";
@@ -623,7 +655,7 @@ namespace haberBot
                 }
                 else
                 {
-                    driver.Close();
+                    driver.Quit();
                     break;
                 }
             }
@@ -631,7 +663,9 @@ namespace haberBot
 
         private void webrazziNews()
         {
-            IWebDriver driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--disable-gpu");
+            IWebDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("https://webrazzi.com/kategori/yapay-zeka/");
 
             string haber_site = "Webrazzi";
@@ -696,14 +730,16 @@ namespace haberBot
                 }
                 else
                 {
-                    driver.Close();
+                    driver.Quit();
                     break;
                 }
             }
         }
         private void futurismNews()
         {
-            IWebDriver driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--disable-gpu");
+            IWebDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("https://futurism.com/categories/ai-artificial-intelligence");
 
             string site = "Futurism";
@@ -784,7 +820,7 @@ namespace haberBot
                 }
                 else
                 {
-                    driver.Close();
+                    driver.Quit();
                     break;
                 }
             }
@@ -792,8 +828,8 @@ namespace haberBot
         private void readWriteNews()
         {
             ChromeOptions options = new ChromeOptions();
+            options.AddArgument("--disable-gpu");
             options.AddArgument("--window-size=600,800");
-
             IWebDriver driver = new ChromeDriver(options);
             driver.Navigate().GoToUrl("https://readwrite.com/category/ai/");
 
@@ -824,17 +860,19 @@ namespace haberBot
                 jsExecutor.ExecuteScript(script);
 
                 script = @"
-                var timeElement = document.evaluate('/html/body/main/section[1]/div/div/div/div/div/div/div[1]/div[2]/div/div[4]/span/time', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
+                var timeElement = document.evaluate('//*[@id=""site-content""]/section[1]/div/div/div/div/div/div/div[1]/div[2]/div/div[4]/span/time', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
                 "if (timeElement) {return timeElement.textContent;} else {return null;}";
-
+                Thread.Sleep(2000);
                 newsDate = jsExecutor.ExecuteScript(script)?.ToString();
-                newsDate = newsDate.Substring(newsDate.IndexOf(":") + 2);
-
                 if (newsDate == null)
                 {
                     i++;
                     continue;
                 }
+                MessageBox.Show(newsDate);
+                newsDate = newsDate.Substring(newsDate.IndexOf(":") + 2);
+
+
 
                 DateTime currentTime = DateTime.Now;
 
@@ -895,10 +933,9 @@ namespace haberBot
                 }
                 else
                 {
-                    driver.Close();
+                    driver.Quit();
                     break;
                 }
-                MessageBox.Show(i.ToString());
             }
         }
 
@@ -1000,6 +1037,17 @@ namespace haberBot
             }
 
             return filteredWordFrequency;
+        }
+        private void UpdateTextBox(string text)
+        {
+            if (textBox1.InvokeRequired)
+            {
+                textBox1.Invoke(new Action<string>(UpdateTextBox), text);
+            }
+            else
+            {
+                textBox1.Text += text;
+            }
         }
 
     }
