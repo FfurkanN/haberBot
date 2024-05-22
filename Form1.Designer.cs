@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             this.run = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.techInside = new System.Windows.Forms.Button();
             this.shiftDelete = new System.Windows.Forms.Button();
             this.technologyreview = new System.Windows.Forms.Button();
@@ -44,7 +40,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.documentPanel = new System.Windows.Forms.Panel();
             this.newsRichTextbox = new System.Windows.Forms.RichTextBox();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.frekansPanel = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,46 +54,6 @@
             this.run.Text = "Haberleri çek";
             this.run.UseVisualStyleBackColor = false;
             this.run.Click += new System.EventHandler(this.run_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
-            this.textBox1.Location = new System.Drawing.Point(1469, 265);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(282, 235);
-            this.textBox1.TabIndex = 1;
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
-            this.button1.Location = new System.Drawing.Point(1344, 42);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
-            this.button2.Location = new System.Drawing.Point(1779, 56);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
-            this.richTextBox1.Location = new System.Drawing.Point(1447, 24);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(304, 222);
-            this.richTextBox1.TabIndex = 4;
-            this.richTextBox1.Text = "";
             // 
             // techInside
             // 
@@ -214,18 +170,20 @@
             // newsRichTextbox
             // 
             this.newsRichTextbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
+            this.newsRichTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.newsRichTextbox.ForeColor = System.Drawing.Color.White;
             this.newsRichTextbox.Location = new System.Drawing.Point(450, 5);
             this.newsRichTextbox.Name = "newsRichTextbox";
             this.newsRichTextbox.Size = new System.Drawing.Size(500, 650);
             this.newsRichTextbox.TabIndex = 17;
             this.newsRichTextbox.Text = "";
             // 
-            // panel2
+            // frekansPanel
             // 
-            this.panel2.Location = new System.Drawing.Point(965, 5);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(290, 650);
-            this.panel2.TabIndex = 18;
+            this.frekansPanel.Location = new System.Drawing.Point(965, 5);
+            this.frekansPanel.Name = "frekansPanel";
+            this.frekansPanel.Size = new System.Drawing.Size(290, 650);
+            this.frekansPanel.TabIndex = 18;
             // 
             // Form1
             // 
@@ -233,31 +191,22 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
             this.ClientSize = new System.Drawing.Size(1262, 673);
-            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.frekansPanel);
             this.Controls.Add(this.newsRichTextbox);
             this.Controls.Add(this.documentPanel);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.richTextBox1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Button run;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button techInside;
         private System.Windows.Forms.Button shiftDelete;
         private System.Windows.Forms.Button technologyreview;
@@ -269,7 +218,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel documentPanel;
         private System.Windows.Forms.RichTextBox newsRichTextbox;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel frekansPanel;
     }
 }
 

@@ -45,15 +45,6 @@ namespace haberBot
             documentPanel.BorderStyle = BorderStyle.None;
             documentPanel.BackColor = Color.Transparent;
         }
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void button2_Click(object sender, EventArgs e)
-        {
-            GetAllData_From_A_Collection();
-        }
-
         private void Add_Document_with_CustomID(string site, string baslik, string icerik, string tarih, Dictionary<string,int> frequency)
         {
             DocumentReference doc = database.Collection(site).Document(baslik);
@@ -65,21 +56,6 @@ namespace haberBot
                 {"frekanslar", frequency}
             };
             doc.SetAsync(data);
-        }
-
-        private async void GetAllData_Of_A_Document()
-        {
-            DocumentReference docRef = database.Collection("Haberler").Document("haber1");
-            DocumentSnapshot docSnap = await docRef.GetSnapshotAsync();
-
-            if (docSnap.Exists)
-            {
-                Dictionary<string, object> haber = docSnap.ToDictionary();
-                foreach (var item in haber)
-                {
-                    richTextBox1.Text += string.Format("{0}: {1}\n", item.Key, item.Value);
-                }
-            }
         }
         private async void GetNewsDocument(string collection)
         {
@@ -115,32 +91,11 @@ namespace haberBot
                 newsRichTextbox.Text += haber.Tarih + "\n\n";
             }
         }
-
-        private async void GetAllData_From_A_Collection()
-        {
-            Query QRef = database.Collection("Haberler").WhereEqualTo("Tarih", "19.05.2024");
-            QuerySnapshot QSnap = await QRef.GetSnapshotAsync();
-
-            foreach (DocumentSnapshot documentSnapshot in QSnap)
-            {
-                Haber haber = documentSnapshot.ConvertTo<Haber>();
-                if (documentSnapshot.Exists)
-                {
-                    richTextBox1.Text += "[HaberID: " + documentSnapshot.Id + "]\n";
-                    richTextBox1.Text += haber.HaberBasligi + "\n";
-                    richTextBox1.Text += haber.HaberIcerigi + "\n";
-                    richTextBox1.Text += haber.Tarih + "\n\n";
-                }
-            }
-
-        }
-
         private void run_Click(object sender, EventArgs e)
         {
-            textBox1.Text += "Haber okuma başladı\n";
             ThreadStart[] threadStarts = new ThreadStart[]
                 {
-                    new ThreadStart( techInsideNews),
+                    new ThreadStart(techInsideNews),
                     new ThreadStart(shiftdeleteNews),
                     new ThreadStart(technologyReviewNews),
                     new ThreadStart(mashableNews),
@@ -154,18 +109,14 @@ namespace haberBot
             {
                 threads[i] = new Thread(threadStarts[i]);
             }
-            // Thread'leri başlatın
             foreach (Thread thread in threads)
             {
                 thread.Start();
             }
-
-            // Tüm thread'lerin bitmesini bekleyin
             foreach (Thread thread in threads)
             {
                 thread.Join();
             }
-            textBox1.Text += "Tüm haberler okundu";
 
         }
         private void techInside_Click(object sender, EventArgs e)
@@ -434,8 +385,6 @@ namespace haberBot
                     {
                         Console.WriteLine("Iframe bulunamadı.");
                     }
-
-
                     if (iframe != null)
                     {
                         driver.SwitchTo().Frame(iframe);
@@ -481,8 +430,7 @@ namespace haberBot
                     driver.Quit();
                     break;
                 }
-            }
-            
+            }   
         }
         private void mashableNews()
         {
@@ -639,8 +587,6 @@ namespace haberBot
                     {
                         Console.WriteLine("Iframe bulunamadı.");
                     }
-
-
                     if (iframe != null)
                     {
                         driver.SwitchTo().Frame(iframe);
@@ -661,8 +607,6 @@ namespace haberBot
                         }
                         driver.SwitchTo().DefaultContent();
                     }
-
-
                     script = @"
                     var h1Element = document.evaluate('//*[@id=""__layout""]/div/div[3]/main/div/div[1]/div[1]/div[1]/div[1]/div[2]/div/h1', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
                     if (h1Element)
@@ -699,7 +643,6 @@ namespace haberBot
                 }
             }
         }
-
         private void webrazziNews()
         {
             ChromeOptions options = new ChromeOptions();
@@ -719,13 +662,11 @@ namespace haberBot
                 "if (timeElement) {return timeElement.textContent;} else {return null;}";
 
                 newsDate = jsExecutor.ExecuteScript(script)?.ToString();
-
                 if(newsDate == null)
                 {
                     i++;
                     continue;
                 }
-
                 DateTime currentTime = DateTime.Now;
 
                 newsDate = ParseTime(newsDate);
@@ -886,13 +827,10 @@ namespace haberBot
             ""
             };
 
-            
-
             int i = 0;
             string newsDate = "", dateNow = "";
             while (i<=6)
             {
-               
                 string script = @"
                 var link = document.evaluate('" + scripts[i++] +"', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
                 "if (link){link.click();}else{console.log('Link not found');}";
@@ -910,8 +848,6 @@ namespace haberBot
                 }
                 MessageBox.Show(newsDate);
                 newsDate = newsDate.Substring(newsDate.IndexOf(":") + 2);
-
-
 
                 DateTime currentTime = DateTime.Now;
 
@@ -977,9 +913,6 @@ namespace haberBot
                 }
             }
         }
-
-
-
         static string ParseTime(string timeText)
         {
             DateTime currentDate = DateTime.Now;
@@ -1074,21 +1007,7 @@ namespace haberBot
                     filteredWordFrequency[kvp.Key] = kvp.Value;
                 }
             }
-
             return filteredWordFrequency;
         }
-        private void UpdateTextBox(string text)
-        {
-            if (textBox1.InvokeRequired)
-            {
-                textBox1.Invoke(new Action<string>(UpdateTextBox), text);
-            }
-            else
-            {
-                textBox1.Text += text;
-            }
-        }
-
-
     }
 }
