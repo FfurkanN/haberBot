@@ -47,6 +47,7 @@
             // run
             // 
             this.run.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
+            this.run.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.run.Location = new System.Drawing.Point(0, 0);
             this.run.Name = "run";
             this.run.Size = new System.Drawing.Size(194, 60);
@@ -58,6 +59,7 @@
             // techInside
             // 
             this.techInside.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
+            this.techInside.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.techInside.Location = new System.Drawing.Point(0, 80);
             this.techInside.Name = "techInside";
             this.techInside.Size = new System.Drawing.Size(194, 60);
@@ -69,6 +71,7 @@
             // shiftDelete
             // 
             this.shiftDelete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
+            this.shiftDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.shiftDelete.Location = new System.Drawing.Point(0, 140);
             this.shiftDelete.Name = "shiftDelete";
             this.shiftDelete.Size = new System.Drawing.Size(194, 60);
@@ -80,6 +83,7 @@
             // technologyreview
             // 
             this.technologyreview.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
+            this.technologyreview.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.technologyreview.Location = new System.Drawing.Point(0, 200);
             this.technologyreview.Name = "technologyreview";
             this.technologyreview.Size = new System.Drawing.Size(194, 60);
@@ -91,6 +95,7 @@
             // mashable
             // 
             this.mashable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
+            this.mashable.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.mashable.Location = new System.Drawing.Point(0, 260);
             this.mashable.Name = "mashable";
             this.mashable.Size = new System.Drawing.Size(194, 60);
@@ -102,6 +107,7 @@
             // zdnet
             // 
             this.zdnet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
+            this.zdnet.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.zdnet.Location = new System.Drawing.Point(0, 320);
             this.zdnet.Name = "zdnet";
             this.zdnet.Size = new System.Drawing.Size(194, 60);
@@ -113,6 +119,7 @@
             // webrazzi
             // 
             this.webrazzi.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
+            this.webrazzi.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.webrazzi.Location = new System.Drawing.Point(0, 380);
             this.webrazzi.Name = "webrazzi";
             this.webrazzi.Size = new System.Drawing.Size(194, 60);
@@ -124,6 +131,7 @@
             // futurism
             // 
             this.futurism.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
+            this.futurism.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.futurism.Location = new System.Drawing.Point(0, 440);
             this.futurism.Name = "futurism";
             this.futurism.Size = new System.Drawing.Size(194, 60);
@@ -135,6 +143,7 @@
             // readwrite
             // 
             this.readwrite.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
+            this.readwrite.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.readwrite.Location = new System.Drawing.Point(0, 500);
             this.readwrite.Name = "readwrite";
             this.readwrite.Size = new System.Drawing.Size(194, 60);

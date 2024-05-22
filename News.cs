@@ -8,13 +8,15 @@ using Google.Cloud.Firestore;
 namespace haberBot
 {
     [FirestoreData]
-    public class Haber
+    public class News
     {
         [FirestoreProperty]
-        public string HaberBasligi { get; set; }
+        public string newsHeader { get; set; }
         [FirestoreProperty]
-        public string HaberIcerigi { get; set; }
+        public string newsText { get; set; }
         [FirestoreProperty]
-        public string Tarih { get; set; }
+        public string newsDate { get; set; }
+        [FirestoreProperty]
+        public Dictionary<string,int> frequency { get; set; }
     }
 }

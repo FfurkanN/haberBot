@@ -31,6 +31,7 @@ namespace haberBot
         public Form1()
         {
             InitializeComponent();
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -50,10 +51,10 @@ namespace haberBot
             DocumentReference doc = database.Collection(site).Document(baslik);
             Dictionary<string, object> data = new Dictionary<string, object>()
             {
-                {"HaberBasligi",baslik },
-                {"HaberIcerigi", icerik },
-                {"Tarih", tarih },
-                {"frekanslar", frequency}
+                {"newsHeader",baslik },
+                {"newsText", icerik },
+                {"newsDate", tarih },
+                {"frequency", frequency}
             };
             doc.SetAsync(data);
         }
@@ -62,7 +63,7 @@ namespace haberBot
             documentPanel.Controls.Clear();
             CollectionReference newsColletion = database.Collection(collection);
             QuerySnapshot snapshots = await newsColletion.GetSnapshotAsync();
-            int y=5; ;
+            int y=5;
             foreach (DocumentSnapshot documentSnapshot in snapshots.Documents)
             {
                 Button btn = new Button();
@@ -79,16 +80,26 @@ namespace haberBot
         }
         private async void getNewsDocumentText(string collection, string documentName)
         {
+            int y = 5;
             newsRichTextbox.Text = "";
+            frekansPanel.Controls.Clear();
             DocumentReference docRef = database.Collection(collection).Document(documentName);
             DocumentSnapshot docSnap = await docRef.GetSnapshotAsync();
 
-            Haber haber = docSnap.ConvertTo<Haber>();
             if (docSnap.Exists)
             {
-                newsRichTextbox.Text += haber.HaberBasligi + "\n\n";
-                newsRichTextbox.Text += haber.HaberIcerigi + "\n\n";
-                newsRichTextbox.Text += haber.Tarih + "\n\n";
+                News news = docSnap.ConvertTo<News>();
+                newsRichTextbox.Text += news.newsDate + "\n" + news.newsHeader + "\n\n";
+                newsRichTextbox.Text += news.newsText + "\n\n";
+
+                foreach(KeyValuePair<string, int> data in news.frequency)
+                {
+                    Label label = new Label();
+                    label.Text = data.Key+":"+data.Value;
+                    label.Location = new Point(2, y);
+                    frekansPanel.Controls.Add((Label)label);
+                    y += 20;
+                }
             }
         }
         private void run_Click(object sender, EventArgs e)
@@ -668,7 +679,6 @@ namespace haberBot
                     continue;
                 }
                 DateTime currentTime = DateTime.Now;
-
                 newsDate = ParseTime(newsDate);
                 dateNow = currentTime.ToString("dd.MM.yyyy");
 
@@ -846,7 +856,6 @@ namespace haberBot
                     i++;
                     continue;
                 }
-                MessageBox.Show(newsDate);
                 newsDate = newsDate.Substring(newsDate.IndexOf(":") + 2);
 
                 DateTime currentTime = DateTime.Now;
@@ -944,7 +953,7 @@ namespace haberBot
             {
                 return date1.ToString("dd.MM.yyyy");
             }
-            else if (DateTime.TryParseExact(timeText, new[] { "d MMMM yyyy ", "dd MMMM yyyy " }, new CultureInfo("tr-TR"), DateTimeStyles.None, out DateTime date2))
+            else if (DateTime.TryParseExact(timeText, new[] { "d MMMM yyyy ", "dd MMMM yyyy ", "d MMMM yyyy", "dd MMMM yyyy" }, new CultureInfo("tr-TR"), DateTimeStyles.None, out DateTime date2))
             {
                 return date2.ToString("dd.MM.yyyy");
             }
