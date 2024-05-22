@@ -895,6 +895,20 @@ namespace haberBot
 
         void frekans(string text)
         {
+            HashSet<string> stopWords = new HashSet<string>();
+
+            foreach (var line in File.ReadLines("tr_stopword.txt"))
+            {
+                stopWords.Add(line.Trim().ToLower());
+            }
+
+            // İngilizce stop words dosyası
+            foreach (var line in File.ReadLines("en_stopword.txt"))
+            {
+                stopWords.Add(line.Trim().ToLower());
+            }
+
+
             // Metni temizleme ve kelimelere ayırma
             string cleanedText = Regex.Replace(text.ToLower(), @"[^\w\s]", ""); // Noktalama işaretlerini kaldır ve küçük harfe çevir
             string[] words = cleanedText.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
@@ -904,14 +918,18 @@ namespace haberBot
 
             foreach (var word in words)
             {
-                if (wordFrequency.ContainsKey(word))
+                if (!stopWords.Contains(word))
                 {
-                    wordFrequency[word]++;
+                    if (wordFrequency.ContainsKey(word))
+                    {
+                        wordFrequency[word]++;
+                    }
+                    else
+                    {
+                        wordFrequency[word] = 1;
+                    }
                 }
-                else
-                {
-                    wordFrequency[word] = 1;
-                }
+                
             }
 
             // Sonuçları yazdırma
@@ -920,7 +938,6 @@ namespace haberBot
                 if(kvp.Value >= 5)
                 {
                     MessageBox.Show($"Kelime: {kvp.Key}, Frekans: {kvp.Value}");
-                    // veritabanına yazdır. ama ben boş kelimeler halini yapacam
                 }
             }
         }
