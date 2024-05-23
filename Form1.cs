@@ -36,7 +36,8 @@ namespace haberBot
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string path = @"haberbot.json";
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            string path =  "haberBot.json";
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
 
             database = FirestoreDb.Create("haberbot");
@@ -934,6 +935,11 @@ namespace haberBot
             {
                 int minutes = int.Parse(timeText.Split(' ')[0]);
                 return currentDate.AddMinutes(-minutes).ToString("dd.MM.yyyy");
+            }
+            else if (timeText.Contains("saniye") || timeText.Contains("second") || timeText.Contains("seconds"))
+            {
+                int seconds = int.Parse(timeText.Split(' ')[0]);
+                return currentDate.AddSeconds(-seconds).ToString("dd.MM.yyyy");
             }
             else if (timeText.Contains("days") || timeText.Contains("day") || timeText.Contains("gün"))
             {
