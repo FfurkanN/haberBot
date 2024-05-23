@@ -36,7 +36,7 @@ namespace haberBot
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string path = AppDomain.CurrentDomain.BaseDirectory + @"haberbot.json";
+            string path = @"haberbot.json";
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
 
             database = FirestoreDb.Create("haberbot");
