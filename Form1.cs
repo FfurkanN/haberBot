@@ -33,14 +33,14 @@ namespace haberBot
             InitializeComponent();
             
         }
-
+        
         private void Form1_Load(object sender, EventArgs e)
         {
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
-            string path =  "haberBot.json";
+            string path =  "haberBot1.json";
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
 
-            database = FirestoreDb.Create("haberbot");
+            database = FirestoreDb.Create("haberbot-f6230");
 
             panel1.BorderStyle = BorderStyle.None;
             panel1.BackColor = Color.Transparent;
@@ -1017,7 +1017,7 @@ namespace haberBot
 
             foreach (var kvp in wordFrequency)
             {
-                if (kvp.Value >= 5)
+                if (kvp.Value >= 4)
                 {
                     filteredWordFrequency[kvp.Key] = kvp.Value;
                 }
