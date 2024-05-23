@@ -22,30 +22,36 @@ using System.CodeDom.Compiler;
 using System.Timers;
 using Google.Cloud.Firestore.V1;
 using System.Security.Policy;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace haberBot
 {
     public partial class Form1 : Form
     {
         FirestoreDb database;
+        private List<Button> buttons = new List<Button>();
         public Form1()
         {
             InitializeComponent();
-            
         }
-        
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
-            string path =  "haberBot1.json";
+            string path =  "haberbot.json";
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
 
-            database = FirestoreDb.Create("haberbot-f6230");
+            database = FirestoreDb.Create("haberbot");
 
             panel1.BorderStyle = BorderStyle.None;
             panel1.BackColor = Color.Transparent;
             documentPanel.BorderStyle = BorderStyle.None;
             documentPanel.BackColor = Color.Transparent;
+
         }
         private void Add_Document_with_CustomID(string site, string baslik, string icerik, string tarih, Dictionary<string,int> frequency)
         {
@@ -61,10 +67,11 @@ namespace haberBot
         }
         private async void GetNewsDocument(string collection)
         {
+            newsRichTextbox.Text = "";
             documentPanel.Controls.Clear();
-            CollectionReference newsColletion = database.Collection(collection);
-            QuerySnapshot snapshots = await newsColletion.GetSnapshotAsync();
-            int y=5;
+            CollectionReference newsCollection = database.Collection(collection);
+            QuerySnapshot snapshots = await newsCollection.OrderByDescending("newsDate").GetSnapshotAsync();
+            int y = 5;
             foreach (DocumentSnapshot documentSnapshot in snapshots.Documents)
             {
                 Button btn = new Button();
@@ -74,16 +81,28 @@ namespace haberBot
                 btn.Location = new Point(2, y);
                 btn.BackColor = Color.FromArgb(92, 92, 92);
                 btn.Click += (sender, e) => getNewsDocumentText(collection, documentSnapshot.Id);
-
+                buttons.Add(btn);
                 documentPanel.Controls.Add(btn);
                 y += 65;
             }
         }
+
         private async void getNewsDocumentText(string collection, string documentName)
         {
             int y = 5;
             newsRichTextbox.Text = "";
             frekansPanel.Controls.Clear();
+
+            foreach (Button btn in buttons)
+            {
+                btn.ForeColor = Color.White;
+            }
+            Button clickedButton = buttons.Find(btn => btn.Text == documentName);
+            if (clickedButton != null)
+            {
+                clickedButton.ForeColor = Color.FromArgb(252, 59, 59 );
+            }
+
             DocumentReference docRef = database.Collection(collection).Document(documentName);
             DocumentSnapshot docSnap = await docRef.GetSnapshotAsync();
 
@@ -98,6 +117,7 @@ namespace haberBot
                     Label label = new Label();
                     label.Text = data.Key+":"+data.Value;
                     label.Location = new Point(2, y);
+                    label.Font = new Font(label.Font.FontFamily,10);
                     frekansPanel.Controls.Add((Label)label);
                     y += 20;
                 }
@@ -123,6 +143,7 @@ namespace haberBot
             }
             foreach (Thread thread in threads)
             {
+                Thread.Sleep(5000);
                 thread.Start();
             }
             foreach (Thread thread in threads)
@@ -133,35 +154,44 @@ namespace haberBot
         }
         private void techInside_Click(object sender, EventArgs e)
         {
+            ChangeButtonColor(techInside);
             GetNewsDocument("Tech inside");
+            
         }
         private void shiftDelete_Click(object sender, EventArgs e)
         {
             GetNewsDocument("ShiftDelete.Net");
+            ChangeButtonColor(shiftDelete);
         }
         private void technologyreview_Click(object sender, EventArgs e)
         {
             GetNewsDocument("Technology Review");
+            ChangeButtonColor(technologyreview);
         }
         private void mashable_Click(object sender, EventArgs e)
         {
             GetNewsDocument("Mashable");
+            ChangeButtonColor(mashable);
         }
         private void zdnet_Click(object sender, EventArgs e)
         {
             GetNewsDocument("Zdnet");
+            ChangeButtonColor(zdnet);
         }
         private void webrazzi_Click(object sender, EventArgs e)
         {
             GetNewsDocument("Webrazzi");
+            ChangeButtonColor (webrazzi);
         }
         private void futurism_Click(object sender, EventArgs e)
         {
             GetNewsDocument("Futurism");
+            ChangeButtonColor(futurism);
         }
         private void readwrite_Click(object sender, EventArgs e)
         {
             GetNewsDocument("Readwrite");
+            ChangeButtonColor(readwrite);
         }
 
         private void techInsideNews()
@@ -1024,5 +1054,20 @@ namespace haberBot
             }
             return filteredWordFrequency;
         }
+        private void ChangeButtonColor(Button clickedButton)
+        {
+            techInside.ForeColor = Color.White;
+            shiftDelete.ForeColor = Color.White;
+            technologyreview.ForeColor = Color.White;
+            mashable.ForeColor = Color.White;
+            zdnet.ForeColor = Color.White;
+            webrazzi.ForeColor = Color.White;
+            futurism.ForeColor = Color.White;
+            readwrite.ForeColor = Color.White;
+
+            clickedButton.ForeColor = Color.FromArgb(252, 59, 59 );
+        }
+
+
     }
 }

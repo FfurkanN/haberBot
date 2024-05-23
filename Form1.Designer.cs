@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.run = new System.Windows.Forms.Button();
             this.techInside = new System.Windows.Forms.Button();
             this.shiftDelete = new System.Windows.Forms.Button();
@@ -41,6 +42,7 @@
             this.documentPanel = new System.Windows.Forms.Panel();
             this.newsRichTextbox = new System.Windows.Forms.RichTextBox();
             this.frekansPanel = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,7 +62,7 @@
             // 
             this.techInside.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
             this.techInside.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.techInside.Location = new System.Drawing.Point(0, 80);
+            this.techInside.Location = new System.Drawing.Point(0, 130);
             this.techInside.Name = "techInside";
             this.techInside.Size = new System.Drawing.Size(194, 60);
             this.techInside.TabIndex = 5;
@@ -72,7 +74,7 @@
             // 
             this.shiftDelete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
             this.shiftDelete.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.shiftDelete.Location = new System.Drawing.Point(0, 140);
+            this.shiftDelete.Location = new System.Drawing.Point(0, 190);
             this.shiftDelete.Name = "shiftDelete";
             this.shiftDelete.Size = new System.Drawing.Size(194, 60);
             this.shiftDelete.TabIndex = 6;
@@ -84,7 +86,7 @@
             // 
             this.technologyreview.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
             this.technologyreview.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.technologyreview.Location = new System.Drawing.Point(0, 200);
+            this.technologyreview.Location = new System.Drawing.Point(0, 250);
             this.technologyreview.Name = "technologyreview";
             this.technologyreview.Size = new System.Drawing.Size(194, 60);
             this.technologyreview.TabIndex = 7;
@@ -96,7 +98,7 @@
             // 
             this.mashable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
             this.mashable.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.mashable.Location = new System.Drawing.Point(0, 260);
+            this.mashable.Location = new System.Drawing.Point(0, 310);
             this.mashable.Name = "mashable";
             this.mashable.Size = new System.Drawing.Size(194, 60);
             this.mashable.TabIndex = 8;
@@ -108,7 +110,7 @@
             // 
             this.zdnet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
             this.zdnet.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.zdnet.Location = new System.Drawing.Point(0, 320);
+            this.zdnet.Location = new System.Drawing.Point(0, 370);
             this.zdnet.Name = "zdnet";
             this.zdnet.Size = new System.Drawing.Size(194, 60);
             this.zdnet.TabIndex = 9;
@@ -120,7 +122,7 @@
             // 
             this.webrazzi.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
             this.webrazzi.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.webrazzi.Location = new System.Drawing.Point(0, 380);
+            this.webrazzi.Location = new System.Drawing.Point(0, 430);
             this.webrazzi.Name = "webrazzi";
             this.webrazzi.Size = new System.Drawing.Size(194, 60);
             this.webrazzi.TabIndex = 10;
@@ -132,7 +134,7 @@
             // 
             this.futurism.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
             this.futurism.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.futurism.Location = new System.Drawing.Point(0, 440);
+            this.futurism.Location = new System.Drawing.Point(0, 490);
             this.futurism.Name = "futurism";
             this.futurism.Size = new System.Drawing.Size(194, 60);
             this.futurism.TabIndex = 11;
@@ -144,7 +146,7 @@
             // 
             this.readwrite.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
             this.readwrite.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.readwrite.Location = new System.Drawing.Point(0, 500);
+            this.readwrite.Location = new System.Drawing.Point(0, 550);
             this.readwrite.Name = "readwrite";
             this.readwrite.Size = new System.Drawing.Size(194, 60);
             this.readwrite.TabIndex = 12;
@@ -154,6 +156,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.run);
             this.panel1.Controls.Add(this.techInside);
             this.panel1.Controls.Add(this.shiftDelete);
@@ -178,7 +181,7 @@
             // 
             // newsRichTextbox
             // 
-            this.newsRichTextbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
+            this.newsRichTextbox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(140)))), ((int)(((byte)(140)))));
             this.newsRichTextbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.newsRichTextbox.ForeColor = System.Drawing.Color.White;
             this.newsRichTextbox.Location = new System.Drawing.Point(450, 5);
@@ -194,21 +197,34 @@
             this.frekansPanel.Size = new System.Drawing.Size(290, 650);
             this.frekansPanel.TabIndex = 18;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label1.Location = new System.Drawing.Point(38, 102);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(94, 25);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "Haberler";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(92)))), ((int)(((byte)(92)))), ((int)(((byte)(92)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(140)))), ((int)(((byte)(140)))));
             this.ClientSize = new System.Drawing.Size(1262, 673);
             this.Controls.Add(this.frekansPanel);
             this.Controls.Add(this.newsRichTextbox);
             this.Controls.Add(this.documentPanel);
             this.Controls.Add(this.panel1);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -228,6 +244,7 @@
         private System.Windows.Forms.Panel documentPanel;
         private System.Windows.Forms.RichTextBox newsRichTextbox;
         private System.Windows.Forms.Panel frekansPanel;
+        private System.Windows.Forms.Label label1;
     }
 }
 
