@@ -44,24 +44,25 @@ namespace haberBot
         {
             string jsonCredentials = @"
             {
-                ""type"": ""service_account"",
-                ""project_id"": ""haberbot"",
-                ""private_key_id"": ""052db68a19bdca901fd98db2f4f6ad53b6d28685"",
-                ""private_key"": ""-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQD14E4hKH6H8s8A\n36PH8bByuBxs9Oj5msJOhUMQuDkB/6OnMgFHd3wItynHwxfaMJSD8Ts8fWbekmLV\n9x08FpT6iLIKo2emFf6xurPF56CBRDUNcs0H+BLFf7I0RuQdWH1mT7spze3J0dsh\nMMvkDxyicLqD6PAHlp4vxd4BLSCYMu/WkDzJXzyPnWfYF2+ADVDs+hYWw1GYHEux\nCGYUQp5G/aJToxz4llteojULJYWLuUHR59QiuSjz+S2GZCWKXXq22QZgc/Fv4tks\nEHxIqGeej4t4vCsWeBXcsTSrBrUk9TXPDXLRa2XzP0XM0+paqbBTvoTYCIEy1fyf\n9vNiLME7AgMBAAECggEADJSkDfbg9oeaR0yqHpM2xVmEFtOEAi8eRxJzGocA+VTn\nvkI4P4kuq9F9zhTxtcsFJluKMOLa7lBMkoi431GDR1U5BINU5j7udiovHaHntZ8h\nHP8lQrjTDEKOHALbYPo3CSxsnEutoZISMl7cgXhM4K2zVW5U4Pm4PiO5/SxrPdSv\ntT+BHPSeujbzUND+9fL1rntgf9TG7hCOAdcb6nIgyx9YkeeXNaltRyO6HyKLEbzU\nT48X3ddM5WgtgHt1ivEGLQayns4gPpQSP7OgS1/iv06DoD8u0qTDJuYcQIIn2C9P\nnLfM0L6+rLdxCF7KNBtWbWHkUfTpptndd5CVVyMs1QKBgQD7XNEX9ctH/+xCergc\nCdhr3wsqyWviAfJaJ1QR5KjxUn1XfmCCtOGEX3Z7Gti+6+LenLSA/wyahELTpx2V\nNBvnv80U7U5MJPwsl27HKumg/PPQiiImUCUA9QB9KisEGnjOFfXP+TAY11uN+KKS\ncgM29YzxZwdVrccnKysajSf/HQKBgQD6aZOKNHwfV1J8f0hsyfAP03kjmLtVUk3R\nsCgwnRpZJluIrKYbSYs47ocYoxbuWNDhKK4TAkTdaY+jEparFl4STQKzv9hUYl4c\nN/YPEChhDN15W0w2ZTunBTMbNJtDDQoJUL8FyAbxoWOG++GwfU8uZdtkeMA3i+eT\ntxqMXZwaNwKBgQCFwbxaXadQpvTX42m5MdwCeuv8Vraby6FlK+xmoSDtWZHtTwiY\nRRyETjBEDeMspWVSRF0hD5drWdodup3ZWaNHzR6adjTl/ABc0jBWt5Ue37v2Sqsl\nbBxkx/r8n8XIJzYFpFXr15Qqg97qS1ZnS1g+lKfthX+3rgN96lDDjj2sWQKBgQDV\n8Q2UrnK9dCWNKFIAYCcx3kNJHlwu8Tp7RD2SCydPs23Qv3DLL3I7Gc9iRTR6Pnd3\nZwISS4X6hQ2rDV6cnWeRyynb2LRCpCgzg7w98lgNUqiF3nKmpqboc5DOVYuxJZrF\niq8piVQlbPVThi+0UdsskOl4VZIj4uvfUDjmY7PS0QKBgFlfkczTIodSRJlyWtCe\nVyHo3gb8FxA3zvbMEcewgl6RyoCiEkEfv6Szt3cAF9YBDo6WblKPfZx6DACFODDl\n3X5HtJzZ6NqP8XzuSHssvAYdsrDF/ZIGY9wJoUh9tPB26rC9Q1m/sj/KwcUuanBf\nQws+BvHkZx3tfYhBDiJE9WKo\n-----END PRIVATE KEY-----\n"",
-                ""client_email"": ""firebase-adminsdk-oizmr@haberbot.iam.gserviceaccount.com"",
-                ""client_id"": ""110220500842894140940"",
-                ""auth_uri"": ""https://accounts.google.com/o/oauth2/auth"",
-                ""token_uri"": ""https://oauth2.googleapis.com/token"",
-                ""auth_provider_x509_cert_url"": ""https://www.googleapis.com/oauth2/v1/certs"",
-                ""client_x509_cert_url"": ""https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-oizmr@haberbot.iam.gserviceaccount.com"",
-                ""universe_domain"": ""googleapis.com""
-            }";
+              ""type"": ""service_account"",
+              ""project_id"": ""news-bot-a94af"",
+              ""private_key_id"": ""b72024b121fedcb0c9ab0f2e784af5f1aae2d382"",
+              ""private_key"": ""-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC5Ra6MK+Umn4O4\n2k5RbWsU7B5qDw44peuuQ8hmY87TA1jwGfiFAqVG6/Hb8ZjpJZTbq2fH71pBaHeI\nxvcLZFOx+zPVwSIB2kC8MbPMVzSiFVaAKF3yiBwC7U3Rs4qQCUy5EWS1bbexz2Nq\nFhV62w2VrP9wxEzN07ItOH/6h6T31Wqfq4ObIfvPZol9pyxeNtM1csH2cYAIAtJO\ngoaQzB0KX0bBumD3NLPl3DTcaRax3gyLTaTCk7RNjAF/k+ZLf6mtgMrTvcLMp+ft\nhSqmE5rkbRUxUvQ4Yx/K+jY4SN6zcSXL0rbAK4Ra4Owozy5iAswsl0tRnxhbAXz7\nKxeP8Fm3AgMBAAECggEACF7mmPyuuMUCPYrXeQRZjzNv2Fjfyp1sfY4gcsfVo2EG\nVqrFuLS65O5qGgbbYsVI6XfgE39z83qV0/8xUDlzMppn6CN2tuC2hgo01mmmPiB6\nrQWl4PxXT6aLGotjGkjhR4dKpovTfdwh4LwosklNXtLXI7AqzC3hYfuohJg2UuAk\nxch8q6qXt3yDgai2LbDTS/F55brF3lIqZSdxlsHjMK4eL7bo9SU4TH6pZOnwNu6V\nAJ5YYj41k0aUPjYCpnWs2U2dtkEtmHopS3eJsTCT1SzwCyWoohaEZ99djOKrVlN+\n2VpJ2EM1ACdtwI7Se8enjiTmRu1BAueiklZha95KuQKBgQD0wYkAySWc27q7Jd1i\nD3M+akjIvQ3W2v2xWy0wLt3TI966V3Mu9MDNBJ6RVSh/EC7JD6UlUuDE99EmUP9c\nmnG7lOCNZUFzzLF4Erae8/E4CEvXcDZLQTlmxBuUdWjGsVmdFkQY1u7JbAOgmjeA\nYgYE93idTQr1F2ulqt9rhjT7owKBgQDByJWiBKCFKLxoDI0yoHc9lAYbh6lhUl3b\nwc6owkocX/KvAzZzc/SvT/73g9oK+g/BbxeCPRH3l8UZiSphXKTbmKEES2S3/SFt\nCKTF57bq9wm0tlSd67zUkrDcAwH3PcMM1DzPqa/IN11u1S2t8qk7QCWleUAFKcPh\nsN9cphJK3QKBgQDDIVzxpGv5P3EC7XAvUrQFScUXTSowZk0lzdQb+vFc+NcEZt3s\nzLK9gPZOVb9Adg1mvLNkK0wJnK1BSAgesv8DlvDjqZtiEApY+UphNYjVrD+S1eJj\nYu+5j5WRaX2MEy6nv22xBAJB0Xye2PRwxTWZVhbyCc83kWGAJdeTqN6q0wKBgQCL\nwL0pO20Im3hFEchC2rckEbzV3eCp710BP6Rq0LPiAtBip059tQKh7G9U0iJOCEmU\nlym9I43xoeLjp6iIzueV910oW7cnecbBe5pZn+KrUb4ONfCQc5KbO6+Q/BpO1Jv2\nhJnWqem72zHm3Jc0++xQbtK3o9on3xcFjSmJB7vpgQKBgCyJn5FOij+P6wf7r2bZ\n0eKDOHsuZX6o1hj4WdDHeiaVxzXwNAm7skYxKW3sgeURHhg3l3zgtEtmSEMFWtKS\niKsNJMa2qD9ccf8c7MrYKNqYGx4rUqY77xAXBXaCjxhkW4rmkTTq4QjZykHz+9cz\nVg/iNKwShEIgQvkW0wWyH5mU\n-----END PRIVATE KEY-----\n"",
+              ""client_email"": ""firebase-adminsdk-yf8so@news-bot-a94af.iam.gserviceaccount.com"",
+              ""client_id"": ""109680351619543763046"",
+              ""auth_uri"": ""https://accounts.google.com/o/oauth2/auth"",
+              ""token_uri"": ""https://oauth2.googleapis.com/token"",
+              ""auth_provider_x509_cert_url"": ""https://www.googleapis.com/oauth2/v1/certs"",
+              ""client_x509_cert_url"": ""https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-yf8so%40news-bot-a94af.iam.gserviceaccount.com"",
+              ""universe_domain"": ""googleapis.com""
+            }
+            ";
             try
             {
                 var credential = GoogleCredential.FromJson(jsonCredentials);
                 database = new FirestoreDbBuilder
                 {
-                    ProjectId = "haberbot",
+                    ProjectId = "news-bot-a94af",
                     Credential = credential
                 }.Build();
             }
