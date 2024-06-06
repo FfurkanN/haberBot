@@ -168,9 +168,15 @@ namespace haberBot
             {
                 btn.ForeColor = Color.White;
             }
+
+            LoadingForm loadingForm = new LoadingForm();
+            loadingForm.Show();
+
             string[] websites = { "Tech inside", "ShiftDelete.Net", "Technology Review", "Mashable", "Zdnet", "Webrazzi" , "Futurism" , "Readwrite" };
 
             Dictionary<string, int> fre = await GetWordFrequencyForLastWeek(websites);
+            loadingForm.Close();
+
             int p = 0;
             foreach (KeyValuePair<string, int> a in fre)
             {
@@ -212,7 +218,7 @@ namespace haberBot
                             }
                             else
                             {
-                                wordFrequency[data.Key] = data.Value;
+                                wordFrequency[data.Key] = data.Value; 
                             }
                         }
                     }
