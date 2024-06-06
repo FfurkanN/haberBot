@@ -159,6 +159,72 @@ namespace haberBot
                 }
             }
         }
+        private async void frequencyBtn_Click(object sender, EventArgs e)
+        {
+            frekansPanel.Controls.Clear();
+            documentPanel.Controls.Clear();
+            newsRichTextbox.Clear();
+            foreach (Button btn in buttons)
+            {
+                btn.ForeColor = Color.White;
+            }
+            string[] websites = { "Tech inside", "ShiftDelete.Net", "Technology Review", "Mashable", "Zdnet", "Webrazzi" , "Futurism" , "Readwrite" };
+
+            Dictionary<string, int> fre = await GetWordFrequencyForLastWeek(websites);
+            int p = 0;
+            foreach (KeyValuePair<string, int> a in fre)
+            {
+                Label label = new Label();
+                label.Text = a.Key + ":" + a.Value;
+                label.Location = new Point(2, p);
+                frekansPanel.Controls.Add(label);
+                p += 20;
+            }
+        }
+        private async Task<Dictionary<string, int>> GetWordFrequencyForLastWeek(IEnumerable<string> collections)
+        {
+            DateTime endDate = DateTime.Today; // Dünkü tarihi al
+            DateTime startDate = endDate.AddDays(-6); // Dünden başlayarak 7 gün öncesine kadar olan tarihi al
+
+            Dictionary<string, int> wordFrequency = new Dictionary<string, int>();
+
+            foreach (string collection in collections)
+            {
+                for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+                {
+                    string dateString = date.ToString("dd.MM.yyyy");
+
+                    // Belirli bir tarih aralığındaki tüm haberlerin veritabanından alınması
+                    QuerySnapshot querySnapshot = await database.Collection(collection)
+                                                              .WhereEqualTo("newsDate", dateString)
+                                                              .GetSnapshotAsync();
+
+                    foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+                    {
+                        News news = documentSnapshot.ConvertTo<News>();
+
+                        // Haberin metnindeki kelimelerin frekanslarını güncelle
+                        foreach (KeyValuePair<string, int> data in news.frequency)
+                        {
+                            if (wordFrequency.ContainsKey(data.Key))
+                            {
+                                wordFrequency[data.Key] += data.Value;
+                            }
+                            else
+                            {
+                                wordFrequency[data.Key] = data.Value;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return wordFrequency.OrderByDescending(kvp => kvp.Value)
+                                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        }
+
+
+
         private void run_Click(object sender, EventArgs e)
         {
             ThreadStart[] threadStarts = new ThreadStart[]
@@ -188,11 +254,10 @@ namespace haberBot
             }
 
         }
-        private void techInside_Click(object sender, EventArgs e)
+        private async void techInside_Click(object sender, EventArgs e)
         {
             ChangeButtonColor(techInside);
             GetNewsDocument("Tech inside");
-            
         }
         private void shiftDelete_Click(object sender, EventArgs e)
         {
