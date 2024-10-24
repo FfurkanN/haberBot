@@ -45,17 +45,7 @@ namespace haberBot
         {
             string jsonCredentials = @"
             {
-              ""type"": ""service_account"",
-              ""project_id"": ""haberbot"",
-              ""private_key_id"": ""052db68a19bdca901fd98db2f4f6ad53b6d28685"",
-              ""private_key"": ""-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQD14E4hKH6H8s8A\n36PH8bByuBxs9Oj5msJOhUMQuDkB/6OnMgFHd3wItynHwxfaMJSD8Ts8fWbekmLV\n9x08FpT6iLIKo2emFf6xurPF56CBRDUNcs0H+BLFf7I0RuQdWH1mT7spze3J0dsh\nMMvkDxyicLqD6PAHlp4vxd4BLSCYMu/WkDzJXzyPnWfYF2+ADVDs+hYWw1GYHEux\nCGYUQp5G/aJToxz4llteojULJYWLuUHR59QiuSjz+S2GZCWKXXq22QZgc/Fv4tks\nEHxIqGeej4t4vCsWeBXcsTSrBrUk9TXPDXLRa2XzP0XM0+paqbBTvoTYCIEy1fyf\n9vNiLME7AgMBAAECggEADJSkDfbg9oeaR0yqHpM2xVmEFtOEAi8eRxJzGocA+VTn\nvkI4P4kuq9F9zhTxtcsFJluKMOLa7lBMkoi431GDR1U5BINU5j7udiovHaHntZ8h\nHP8lQrjTDEKOHALbYPo3CSxsnEutoZISMl7cgXhM4K2zVW5U4Pm4PiO5/SxrPdSv\ntT+BHPSeujbzUND+9fL1rntgf9TG7hCOAdcb6nIgyx9YkeeXNaltRyO6HyKLEbzU\nT48X3ddM5WgtgHt1ivEGLQayns4gPpQSP7OgS1/iv06DoD8u0qTDJuYcQIIn2C9P\nnLfM0L6+rLdxCF7KNBtWbWHkUfTpptndd5CVVyMs1QKBgQD7XNEX9ctH/+xCergc\nCdhr3wsqyWviAfJaJ1QR5KjxUn1XfmCCtOGEX3Z7Gti+6+LenLSA/wyahELTpx2V\nNBvnv80U7U5MJPwsl27HKumg/PPQiiImUCUA9QB9KisEGnjOFfXP+TAY11uN+KKS\ncgM29YzxZwdVrccnKysajSf/HQKBgQD6aZOKNHwfV1J8f0hsyfAP03kjmLtVUk3R\nsCgwnRpZJluIrKYbSYs47ocYoxbuWNDhKK4TAkTdaY+jEparFl4STQKzv9hUYl4c\nN/YPEChhDN15W0w2ZTunBTMbNJtDDQoJUL8FyAbxoWOG++GwfU8uZdtkeMA3i+eT\ntxqMXZwaNwKBgQCFwbxaXadQpvTX42m5MdwCeuv8Vraby6FlK+xmoSDtWZHtTwiY\nRRyETjBEDeMspWVSRF0hD5drWdodup3ZWaNHzR6adjTl/ABc0jBWt5Ue37v2Sqsl\nbBxkx/r8n8XIJzYFpFXr15Qqg97qS1ZnS1g+lKfthX+3rgN96lDDjj2sWQKBgQDV\n8Q2UrnK9dCWNKFIAYCcx3kNJHlwu8Tp7RD2SCydPs23Qv3DLL3I7Gc9iRTR6Pnd3\nZwISS4X6hQ2rDV6cnWeRyynb2LRCpCgzg7w98lgNUqiF3nKmpqboc5DOVYuxJZrF\niq8piVQlbPVThi+0UdsskOl4VZIj4uvfUDjmY7PS0QKBgFlfkczTIodSRJlyWtCe\nVyHo3gb8FxA3zvbMEcewgl6RyoCiEkEfv6Szt3cAF9YBDo6WblKPfZx6DACFODDl\n3X5HtJzZ6NqP8XzuSHssvAYdsrDF/ZIGY9wJoUh9tPB26rC9Q1m/sj/KwcUuanBf\nQws+BvHkZx3tfYhBDiJE9WKo\n-----END PRIVATE KEY-----\n"",
-              ""client_email"": ""firebase-adminsdk-oizmr@haberbot.iam.gserviceaccount.com"",
-              ""client_id"": ""110220500842894140940"",
-              ""auth_uri"": ""https://accounts.google.com/o/oauth2/auth"",
-              ""token_uri"": ""https://oauth2.googleapis.com/token"",
-              ""auth_provider_x509_cert_url"": ""https://www.googleapis.com/oauth2/v1/certs"",
-              ""client_x509_cert_url"": ""https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-oizmr%40haberbot.iam.gserviceaccount.com"",
-              ""universe_domain"": ""googleapis.com""
+             //your jsonCredentials
             }
             ";
             try
@@ -71,13 +61,6 @@ namespace haberBot
             {
                 Console.WriteLine("Error creating Firestore client: " + ex.Message);
             }
-
-            //string basePath = AppDomain.CurrentDomain.BaseDirectory;
-            //string path =  "haberbot.json";
-            //Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
-
-            //database = FirestoreDb.Create("haberbot");
-
             panel1.BorderStyle = BorderStyle.None;
             panel1.BackColor = Color.Transparent;
             documentPanel.BorderStyle = BorderStyle.None;
